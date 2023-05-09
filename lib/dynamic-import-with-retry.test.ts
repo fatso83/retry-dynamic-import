@@ -5,7 +5,7 @@ function createChromeImportError(path: string) {
 }
 
 function createFirefoxImportError(path: string) {
-  return new Error(`Failed to fetch dynamically imported module: ${path}`)
+  return new Error(`TODO: something about 'dynamic loading failed: ${path}'`)
 }
 
 async function createNodeImportError(path: string) {
@@ -31,7 +31,7 @@ async function testErrorHandling(networkError: Error) {
 
   const dynamicImportWithRetry = createDynamicImportWithRetry(1, {importFunction: importStub})
 
-  const promise = dynamicImportWithRetry(originalImport /* will not be used */)
+  const promise = dynamicImportWithRetry(originalImport)
   jest.advanceTimersByTime(1000)
   await promise
 
@@ -42,6 +42,7 @@ async function testErrorHandling(networkError: Error) {
 
 describe('createDynamicImportWithRetry bust the cache of a module using the current time', () => {
   test('chrome handling', async () => testErrorHandling(createChromeImportError(path)))
+
   // TODO?:
   //test('firefox handling', async () => testErrorHandling(createFirefoxImportError(path)))
   //test('node handling', async () => testErrorHandling(await createNodeImportError(path)))
