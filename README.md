@@ -14,6 +14,18 @@ dependency should fail to load.
 
 ## Usage
 
+### Vanilla JS util 
+> Works in any framework
+
+```typescript
+const dynamicImportWithRetry = createDynamicImportWithRetry(5);
+
+const myModule = dynamicImportWithRetry( () => import('./my-module')) // this works regardless of framework, lib, etc
+```
+
+
+### LazyReact
+Thin wrapper around the above
 
 ```tsx
 const LazyAbout = LazyReact(() => import("./components/About"));
