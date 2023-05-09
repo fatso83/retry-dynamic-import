@@ -31,6 +31,7 @@ async function testErrorHandling(networkError: Error) {
 
   const dynamicImportWithRetry = createDynamicImportWithRetry(1, {
     importFunction: importStub,
+      logger: (...a) => undefined
   });
 
   dynamicImportWithRetry(originalImport);
