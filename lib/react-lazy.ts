@@ -1,7 +1,7 @@
-import React from 'react'
-import createDynamicImportWithRetry from './dynamic-import-with-retry'
+import React from "react";
+import createDynamicImportWithRetry from "./dynamic-import-with-retry";
 
-const defaultDynamicImportWithRetry = createDynamicImportWithRetry(5)
+const defaultDynamicImportWithRetry = createDynamicImportWithRetry(5);
 /**
  * This works around the fact that module resolutions are cached per spec. Which means that if a module should
  * fail to import by some random network error _once_, it will keep on failing for the remainder of the session.
@@ -17,6 +17,6 @@ const defaultDynamicImportWithRetry = createDynamicImportWithRetry(5)
  * @param importer
  */
 function lazyImportWithRetry(importer: () => Promise<any>) {
-  return React.lazy(() => defaultDynamicImportWithRetry(importer))
+  return React.lazy(() => defaultDynamicImportWithRetry(importer));
 }
-export default lazyImportWithRetry
+export default lazyImportWithRetry;
