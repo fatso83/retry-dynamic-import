@@ -1,4 +1,4 @@
-import { createDynamicImportWithRetry } from './lazy-import-with-retry'
+import  createDynamicImportWithRetry  from './dynamic-import-with-retry'
 
 function createChromeImportError(path: string) {
   return new Error(`Failed to fetch dynamically imported module: ${path}`)

@@ -21,6 +21,7 @@
     "jsx": "react-jsx"
   },
   "include": [
+    "lib/",
     "demo/src"
   ],
   "references": [

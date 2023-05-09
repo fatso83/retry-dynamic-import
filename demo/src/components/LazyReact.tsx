@@ -1,5 +1,5 @@
 import React from "react";
-import lazyImportWithRetry from '../../../lazy-import-with-retry'
+import lazyImportWithRetry from '../../../lib/react-lazy'
 
 export const LazyReact = lazyImportWithRetry
 
