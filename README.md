@@ -1,7 +1,14 @@
 # Retry dynamic imports 
 > Retry dynamic imports using cache busting and exponential backoff
 
-Fork of Alon Mizrahi's work to solidify with tests, support more browsers, improve perf with caching, etc. 
+Fork of Alon Mizrahi's work and make it available as a package.
+
+I added unit tests and packaging, but will hopefully support more browsers, improve perf with caching, etc. 
+
+## Installing
+```
+npm i @fatso83/retry-dynamic-import
+```
 
 The package exposes
 ```
@@ -9,6 +16,9 @@ export const dynamicImportWithRetry // default implementation with 5 retries
 export const createDynamicImportWithRetry  // make your own version of dynamicImportWithRetry
 export const reactLazyWithRetry // can be used instead of React.lazy(). Wraps around dynamicImportWithRetry
 ```
+
+React is an optional dependency, which means you can use this with Svelte or VanillaJS without
+pulling in extra dependencies.
 
 
 ## Limitations
