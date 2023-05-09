@@ -1,6 +1,6 @@
 {
-  "name": "retry-dynamic-import",
-  "private": true,
+  "name": "@fatso83/retry-dynamic-import",
+  "private": false,
   "version": "0.0.1",
   "type": "module",
   "scripts": {
@@ -14,7 +14,8 @@
   },
   "main": "./dist/index.js",
   "files": [
-    "dist/*.js"
+    "dist/*.js",
+    "dist/*.d.ts"
   ],
   "devDependencies": {
     "@types/jest": "^29.5.1",

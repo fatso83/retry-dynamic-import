@@ -7,7 +7,7 @@ The package exposes
 ```
 export const dynamicImportWithRetry // default implementation with 5 retries
 export const createDynamicImportWithRetry  // make your own version of dynamicImportWithRetry
-export const reactLazy // can be used instead of React.lazy(). Wraps around dynamicImportWithRetry
+export const reactLazyWithRetry // can be used instead of React.lazy(). Wraps around dynamicImportWithRetry
 ```
 
 
@@ -33,8 +33,8 @@ const myModule = dynamicImportWithRetry( () => import('./my-module')) // this wo
 Thin wrapper around the above
 
 ```tsx
-const LazyAbout = LazyReact(() => import("./components/About"));
-const LazyHome = LazyReact(() => import("./components/Home"));
+const LazyAbout = reactLazyWithRetry(() => import("./components/About"));
+const LazyHome = reactLazyWithRetry(() => import("./components/Home"));
 
 const App = () => (
   <Router>
