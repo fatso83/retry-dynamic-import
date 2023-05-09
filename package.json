@@ -6,11 +6,12 @@
   "scripts": {
     "dev:demo": "vite build -c demo/vite.config.ts --force demo/ ",
     "build:demo": "tsc && vite build -c demo/vite.config.ts demo/",
+    "build": "npm run build:demo && tsc --out dist",
     "preview:demo": "vite preview -c demo/vite.config.ts demo/",
     "test": "jest"
   },
   "files": [
-    "./lazy-import-with-retry.ts"
+    "./dist/bundle.js"
   ],
   "devDependencies": {
     "@types/jest": "^29.5.1",

@@ -4,6 +4,11 @@
 Fork of Alon Mizrahi's work to solidify with tests, support more browsers, improve perf with caching, etc. 
 
 The package exposes
+```
+export const dynamicImportWithRetry // default implementation with 5 retries
+export const createDynamicImportWithRetry  // make your own version of dynamicImportWithRetry
+export const reactLazy // can be used instead of React.lazy(). Wraps around dynamicImportWithRetry
+```
 
 
 ## Limitations
