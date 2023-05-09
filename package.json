@@ -4,16 +4,17 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
+    "clean": "rimraf dist demo/dist",
     "dev:demo": "vite build -c demo/vite.config.ts --force demo/ ",
     "build:demo": "tsc && vite build -c demo/vite.config.ts demo/",
     "build:dist": "tsc --project ./tsconfig.build.json --outDir dist",
-    "build": "run-p build:*",
+    "build": "npm run clean && run-p build:*",
     "preview:demo": "vite preview -c demo/vite.config.ts demo/",
     "test": "jest"
   },
-  "main": "./dist/lib/index.js",
+  "main": "./dist/index.js",
   "files": [
-    "dist/lib/*.js"
+    "dist/*.js"
   ],
   "devDependencies": {
     "@types/jest": "^29.5.1",
@@ -27,6 +28,7 @@
     "react": "^18.2.0",
     "react-confetti": "^6.1.0",
     "react-dom": "^18.2.0",
+    "rimraf": "^5.0.0",
     "ts-jest": "^29.1.0",
     "ts-node": "^10.9.1",
     "typescript": "5",
