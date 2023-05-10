@@ -1,9 +1,15 @@
 # Retry dynamic imports 
 > Retry dynamic imports using cache busting and exponential backoff
 
-Fork of Alon Mizrahi's work and make it available as a package.
+This is a fork of Alon Mizrahi's work, made available as a package.
 
 I added unit tests and packaging, but will hopefully support more browsers, improve perf with caching, etc. 
+
+## Limitations
+1. Browser support: currently we match on the specific error message given by Chromium browsers (Edge, Chrome, etc). Should be very easy to add support for Firefox, etc.
+2. Transitive imports: read [this article](https://medium.com/@alonmiz1234/retry-dynamic-imports-with-react-lazy-c7755a7d557a) to understand the details
+of how dynamic imports might fail and how this solves some of these use cases. One use case it cannot solve is if a transitive 
+dependency should fail to load.
 
 ## Installing
 ```
@@ -21,12 +27,6 @@ React is an optional dependency, which means you can use this with Svelte or Van
 pulling in extra dependencies.
 
 
-## Limitations
-Read [this article](https://medium.com/@alonmiz1234/retry-dynamic-imports-with-react-lazy-c7755a7d557a) to understand the details
-of how dynamic imports might fail and how this solves some of these use cases. One use case it cannot solve is if a transitive 
-dependency should fail to load.
-
-
 ## Usage
 
 ### Vanilla JS util 
@@ -35,7 +35,7 @@ dependency should fail to load.
 ```typescript
 const dynamicImportWithRetry = createDynamicImportWithRetry(5);
 
-const myModule = dynamicImportWithRetry( () => import('./my-module')) // this works regardless of framework, lib, etc
+const myModule = dynamicImportWithRetry(() => import('./my-module')) // this works regardless of framework, lib, etc
 ```
 
 
