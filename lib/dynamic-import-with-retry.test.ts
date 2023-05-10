@@ -1,54 +1,62 @@
-import createDynamicImportWithRetry from "./dynamic-import-with-retry";
+import createDynamicImportWithRetry, {
+  _parseModuleUrlFromImporterBody as parseBody,
+} from "./dynamic-import-with-retry";
 
-function createChromeImportError(path: string) {
-  return new Error(`Failed to fetch dynamically imported module: ${path}`);
-}
+// Not able to get this working for some reason? It cannot find the export
+//import type {StrategyName} from  "./dynamic-import-with-retry";
 
-function createFirefoxImportError(path: string) {
-  return new Error(`TODO: something about 'dynamic loading failed: ${path}'`);
-}
-
-async function createNodeImportError(path: string) {
-  let caught;
-  try {
+describe("path parsing of importer function", () => {
+  // @ts-ignore
+  const importer1 = () => import("some-module1");
+  const importer2 = () => {
     // @ts-ignore
-    await import("../../foo/bar/baz/random1234"); // => TypeError: Invalid URL
-  } catch (err) {
-    caught = err;
-  }
-  return caught;
-}
+    return import("some-module2");
+  };
+  const importer3 = function () {
+    // some comment
+    // @ts-ignore
+    return import("some-module3");
+  };
 
-const path = "https://foobar.com/assets/foo-a123.js";
-
-async function testErrorHandling(networkError: Error) {
-  const originalImport = jest.fn().mockRejectedValueOnce(networkError);
-
-  // unsure how to use Jest's fake timers to control the time completely with promises ...
-  const clock = jest.useFakeTimers({ now: 1000, doNotFake: [] });
-  const importStub = jest.fn();
-  importStub.mockResolvedValueOnce("export default () => <div>42</div>");
-
-  const dynamicImportWithRetry = createDynamicImportWithRetry(1, {
-    importFunction: importStub,
-      logger: (...a) => undefined
+  it("should work", () => {
+    expect(parseBody(importer1)).toEqual("some-module1");
+    expect(parseBody(importer2)).toEqual("some-module2");
+    expect(parseBody(importer3)).toEqual("some-module3");
   });
-
-  dynamicImportWithRetry(originalImport);
-  await clock.advanceTimersByTimeAsync(1000);
-
-  expect(originalImport).toHaveBeenCalledTimes(1);
-  expect(importStub).toHaveBeenCalledTimes(1);
-  expect(importStub).toBeCalledWith(
-    "https://foobar.com/assets/foo-a123.js?t=1500" /* 1000 + 2^-1*/
-  );
-}
+});
 
 describe("createDynamicImportWithRetry bust the cache of a module using the current time", () => {
-  test("chrome handling", async () =>
-    testErrorHandling(createChromeImportError(path)));
+  global.location = { origin: "https://localhost:1234" } as any;
+  const path = "/assets/foo-a123.js";
 
-  // TODO?:
-  //test('firefox handling', async () => testErrorHandling(createFirefoxImportError(path)))
-  //test('node handling', async () => testErrorHandling(await createNodeImportError(path)))
+  const testRetryImportUsingStrategy = async (strategy: string) => {
+    const body = `
+      throw new TypeError("Failed to fetch dynamically imported module: https://localhost:1234${path}");
+
+      // required to parse the path
+      return import("${path}");`;
+
+    const originalImport = new Function(body);
+
+    const clock = jest.useFakeTimers({ now: 1000, doNotFake: [] });
+    const importStub = jest.fn();
+    importStub.mockResolvedValueOnce("export default () => <div>42</div>");
+
+    const dynamicImportWithRetry = createDynamicImportWithRetry(1, {
+      importFunction: importStub,
+        strategy: strategy as any
+      //logger: (...a) => console.log(...a),
+    });
+
+    const _promise = dynamicImportWithRetry(originalImport as any);
+    await clock.advanceTimersByTimeAsync(1000);
+
+    expect(importStub).toHaveBeenCalledTimes(1);
+    expect(importStub).toBeCalledWith(
+      "https://localhost:1234/assets/foo-a123.js?t=1500" /* 1000 + 2^-1*/
+    );
+  }
+
+    test('it works using parsing of module name in importer body', () => testRetryImportUsingStrategy('PARSE_IMPORTER_FUNCTION_BODY' as const))
+    test('it works using parsing of Chromium error messages', () => testRetryImportUsingStrategy('PARSE_ERROR_MESSAGE' as const))
 });

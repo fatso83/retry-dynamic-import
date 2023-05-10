@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "clean": "rimraf dist demo/dist",
-    "dev:demo": "vite build -c demo/vite.config.ts --force demo/ ",
+    "dev:demo": "vite -c demo/vite.config.ts --force demo/ ",
     "build:demo": "tsc && vite build -c demo/vite.config.ts demo/",
     "build:dist": "tsc --project ./tsconfig.build.json --outDir dist",
     "build": "npm run clean && run-p build:*",

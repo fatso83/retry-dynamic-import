@@ -76,11 +76,7 @@ export default {
   // ],
 
   // An array of file extensions your modules use
-   moduleFileExtensions: [
-     "js",
-     "ts",
-     "tsx",
-   ],
+  moduleFileExtensions: ["js", "ts", "tsx"],
 
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
   // moduleNameMapper: {},
@@ -119,9 +115,7 @@ export default {
   // rootDir: undefined,
 
   // A list of paths to directories that Jest should use to search for files in
-   roots: [
-     "<rootDir>/lib"
-   ],
+  roots: ["<rootDir>/lib"],
 
   // Allows you to use a custom runner instead of Jest's default test runner
   // runner: "jest-runner",
@@ -170,7 +164,7 @@ export default {
   // A map from regular expressions to paths to transformers
   // transform: undefined,
   transform: {
-    '^.+\\.ts?$': 'ts-jest'
+    "^.+\\.ts?$": "ts-jest",
   },
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation

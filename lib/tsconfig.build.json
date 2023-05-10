@@ -3,9 +3,6 @@
     "composite": true,
     "module": "ESNext"
   },
-  "include": [
-    "*.ts"
-  ],"exclude": [
-    "*.test.ts"
-  ]
+  "include": ["*.ts"],
+  "exclude": ["*.test.ts"]
 }
