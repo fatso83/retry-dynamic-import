@@ -39,8 +39,7 @@ const strategies: Record<StrategyName, UrlStrategy> = {
 };
 
 const defaultOpts = {
-  strategy: "PARSE_ERROR_MESSAGE" as const,
-  //strategy: "PARSE_IMPORTER_FUNCTION_BODY" as const,
+  strategy: "PARSE_IMPORTER_FUNCTION_BODY" as const,
   importFunction: (path: string) => import(path),
   logger: noop,
 };
