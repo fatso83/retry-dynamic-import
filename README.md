@@ -39,8 +39,8 @@ const myModule = dynamicImportWithRetry( () => import('./my-module')) // this wo
 ```
 
 
-### LazyReact
-Thin wrapper around the above
+### reactLazyWithRetry
+Thin wrapper around the above, calling out to `React.lazy()`
 
 ```tsx
 const LazyAbout = reactLazyWithRetry(() => import("./components/About"));
