@@ -40,7 +40,7 @@ const strategies: Record<StrategyName, UrlStrategy> = {
 
 const defaultOpts = {
   strategy: "PARSE_IMPORTER_FUNCTION_BODY" as const,
-  importFunction: (path: string) => import(path),
+  importFunction: (path: string) => import(/* @vite-ignore */ path),
   logger: noop,
 };
 /**
