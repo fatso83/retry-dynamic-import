@@ -10,7 +10,7 @@
     "build:dist": "tsc --project ./tsconfig.build.json --outDir dist",
     "build": "npm run clean && run-p build:*",
     "preview:demo": "vite preview -c demo/vite.config.ts demo/",
-    "prepublish": "npm run build",
+    "prepublishOnly": "npm run build",
     "postpublish": "git push && git push --tags",
     "test": "jest"
   },
