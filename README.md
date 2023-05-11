@@ -2,12 +2,24 @@
 
 > Retry dynamic imports using cache busting and exponential backoff
 
-This is a fork of Alon Mizrahi's work, made available as a package.
+This is a fork of Alon Mizrahi's work, made available as a package and with additional improvements
 
 Completed improvements:
 - ✅ unit tests
-- ✅ support non-Chromium 
+- ✅ support non-Chromium browsers (like Firefox)
 - ❌ cache previous resolutions
+
+## Why not just catch a failure and reload the page?
+While that works fine in Firefox, in Chromium based browsers (Edge, Chrome, ...) a failed module import is _cached_ and that failure is _sticky_: it is not retried on reload or over browser restarts (per Chrome 113). That is _real_ failures, not DevTool URL blocking, which is _not sticky_, for whatever reason.
+
+## Demo?
+1. Open the [demo application that is deployed on Github Pages](https://fatso83.github.io/retry-dynamic-import) 
+2. Open DevTools and refresh the page
+3. Right click on the ExpensiveComponent.* url and choose to block it
+4. Refresh and see the network requests fail in the Network tab of DevTools 
+5. Unblock the url and see it work again 
+
+If you want to see the sticky behavior mentioned above, setup [Charles Proxy and its "Breakpoints" feature](https://www.charlesproxy.com/documentation/proxying/breakpoints/) to be able to selectively block or accept requests. Works great!
 
 ## Limitations
 Transitive imports: read [this article](https://medium.com/@alonmiz1234/retry-dynamic-imports-with-react-lazy-c7755a7d557a) to understand the details
