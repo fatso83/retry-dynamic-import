@@ -9,8 +9,7 @@ const noop = () => {};
 
 const identity = (e: any) => e;
 const uriOrRelativePathRegex = /"((\w+:(\/?\/?))?[^\s]+)"/;
-/** only exposed for testing */
-export function _parseModuleUrlFromImporterBody(
+function parseModulePathFromImporterBody(
   importer: () => any
 ): string | null {
   const fnString = importer.toString();
@@ -28,13 +27,16 @@ const strategies: Record<StrategyName, UrlStrategy> = {
     // this assumes that the exception will contain this specific text with the url of the module
     // if not, the url will not be able to parse and we'll get an error on that
     // eg. "Failed to fetch dynamically imported module: https://example.com/assets/Home.tsx"
-    return error.message
+    const urlAsString = error.message
       .replace("Failed to fetch dynamically imported module: ", "")
       .trim();
+
+    const url = new URL(urlAsString);
+    return url.href;
   },
-  /** Should work in most browsers, but is potentially fragile when it comes to assembling the url from a sub-folder */
+  /** Should work in most browsers */
   PARSE_IMPORTER_FUNCTION_BODY: (_: Error, importer: () => any) => {
-    return `${location.origin}${_parseModuleUrlFromImporterBody(importer)}`;
+    return parseModulePathFromImporterBody(importer);
   },
 };
 
@@ -67,10 +69,10 @@ export default function createDynamicImportWithRetry<T extends number>(
     } catch (error: any) {
       logger(Date.now(), `Importing failed: `, error);
 
-      const moduleUrl = strategies[strategy](error, importer);
-      logger(`Parsed url using ${strategy}:${moduleUrl}`);
+      const modulePath = strategies[strategy](error, importer);
+      logger(`Parsed url using ${strategy}:${modulePath}`);
 
-      if (!moduleUrl) {
+      if (!modulePath) {
         logger("Unable to determine path to module when trying to reload");
         // nothing we can do ...
         throw error;
@@ -80,18 +82,21 @@ export default function createDynamicImportWithRetry<T extends number>(
       for (let i = -1; i < maxRetries; i++) {
         await new Promise((resolve) => setTimeout(resolve, 1000 * 2 ** i));
 
-        const url = new URL(moduleUrl);
         // add a timestamp to the url to force a reload the module (and not use the cached version - cache busting)
-        url.searchParams.set("t", `${+new Date()}`);
-        logger(Date.now(), `Trying importing using module url set to ${url}`);
+        let cacheBustedPath = `${modulePath}?t=${+new Date()}`;
+        logger(Date.now(), `Trying importing using module url set to ${cacheBustedPath}`);
 
         try {
-          return await importFunction(url.href);
+          return await importFunction(cacheBustedPath);
         } catch (e) {
-          logger(`Retrying import for ${url.href}`);
+          logger(`Retrying import for ${cacheBustedPath}`);
         }
       }
       throw error;
     }
   };
 }
+
+/** only exposed for testing */
+export const _parseModuleUrlFromImporterBody = parseModulePathFromImporterBody;
+export const _strategies = strategies;
