@@ -17,3 +17,4 @@ cp -r demo/dist/* docs/
 git add docs
 git cm "Updating Github Pages"
 git push && git push --tags
+git switch main
