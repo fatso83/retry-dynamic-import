@@ -6,7 +6,7 @@
   "scripts": {
     "clean": "rimraf dist demo/dist",
     "dev:demo": "vite -c demo/vite.config.ts --force demo/ ",
-    "build:demo-gh-pages": "tsc && vite build --base=retry-dynamic-import -c demo/vite.config.ts demo",
+    "build:demo-gh-pages": "tsc && vite build --base=/retry-dynamic-import -c demo/vite.config.ts demo",
     "build:dist": "tsc --project ./tsconfig.build.json --outDir dist",
     "build": "npm run clean && run-p build:*",
     "preview:demo": "vite preview -c demo/vite.config.ts demo/",
