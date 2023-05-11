@@ -65,3 +65,7 @@ const App = () => (
   </Router>
 );
 ```
+
+## Contributing
+Please do!
+- Run tests: `DEBUG=dynamic-import:* npm t -- --watch` (the env var is just for verbose output)
