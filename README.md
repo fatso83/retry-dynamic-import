@@ -1,6 +1,8 @@
 # Retry dynamic imports
 
 > Retry dynamic imports using cache busting and exponential backoff
+> 
+<a href="https://www.npmjs.com/package/@fatso83/retry-dynamic-import/"><img src="https://img.shields.io/npm/v/@fatso83/retry-dynamic-import.svg?style=flat" alt="npm version"></a>
 
 This is a fork of Alon Mizrahi's work, made available as a package and with additional improvements
 
@@ -10,7 +12,7 @@ Completed improvements:
 - ✅ support non-Chromium browsers (like Firefox)
 - ✅ tree shakeable (does not pull in React if you just use the non-react bits)
 - ✅ speed up resolution on afflicted clients by not waiting for first cache busting attempt
-- ❌ dual exports (currently just ESM), shout out if you want it
+- ❌ dual exports (currently just ESM), shout out if you want it (we already produce the `*.cjs` files)
 
 ## Why not just catch a failure and reload the page?
 
@@ -61,7 +63,7 @@ See the unit tests or the implementation for what options it supports.
 
 ### React utility
 
-Additionallly, you can `import reactLazyWithRetry from @fatso83/retry-dynamic-import/react-lazy` for a utility that can be used instead of React.lazy() for lazy imports with retries.
+Additionallly, you can `import reactLazyWithRetry from '@fatso83/retry-dynamic-import/react-lazy'` for a utility that can be used instead of React.lazy() for lazy imports with retries.
 
 _React is not a dependency of this package_, which means you can use it with Svelte or VanillaJS without pulling in extra dependencies, but if you use the `react-lazy` sub-export you will of course need to have React in your dependency tree :)
 
