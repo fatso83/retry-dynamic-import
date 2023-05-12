@@ -10,7 +10,7 @@ Completed improvements:
 - ✅ support non-Chromium browsers (like Firefox)
 - ✅ tree shakeable (does not pull in React if you just use the non-react bits)
 - ✅ speed up resolution on afflicted clients by not waiting for first cache busting attempt
-- ❌ dual exports (currently just ESM), shout out if you want it
+- ❌ dual exports (currently just ESM), shout out if you want it (we already produce the `*.cjs` files)
 
 ## Why not just catch a failure and reload the page?
 
