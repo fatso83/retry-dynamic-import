@@ -1,6 +1,7 @@
 # Retry dynamic imports
 
 > Retry dynamic imports using cache busting and exponential backoff
+> 
 <a href="https://www.npmjs.com/package/@fatso83/retry-dynamic-import/"><img src="https://img.shields.io/npm/v/@fatso83/retry-dynamic-import.svg?style=flat" alt="npm version"></a>
 
 This is a fork of Alon Mizrahi's work, made available as a package and with additional improvements
