@@ -12,7 +12,7 @@
     "preview:demo": "vite preview -c demo/vite.config.ts demo/",
     "prepublishOnly": "npm run build",
     "postpublish": "./scripts/postpublish.sh",
-    "postversion": "npm run publish",
+    "postversion": "npm publish",
     "test": "jest"
   },
   "main": "./dist/index.js",
