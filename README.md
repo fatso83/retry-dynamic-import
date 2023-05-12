@@ -9,7 +9,8 @@ Completed improvements:
 - ✅ unit tests
 - ✅ support non-Chromium browsers (like Firefox)
 - ✅ tree shakeable (does not pull in React if you just use the non-react bits)
-- ❌ cache previous resolutions
+- ✅ speed up resolution on afflicted clients by not waiting for first cache busting attempt
+- ❌ dual exports (currently just ESM), shout out if you want it
 
 ## Why not just catch a failure and reload the page?
 

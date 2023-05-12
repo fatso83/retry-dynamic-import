@@ -1,10 +1,11 @@
 {
   "name": "@fatso83/retry-dynamic-import",
   "private": false,
-  "version": "1.1.0",
+  "version": "1.1.1",
   "type": "module",
   "scripts": {
     "prebuild": "rimraf types dist demo/dist",
+    "dev": "jest --watch",
     "dev:demo": "vite -c demo/vite.config.ts --force demo/ ",
     "build:demo-gh-pages": "npm run build:demo -- --base=/retry-dynamic-import",
     "build:demo": "tsc && vite build -c demo/vite.config.ts demo",
