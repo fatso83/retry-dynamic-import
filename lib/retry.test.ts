@@ -1,10 +1,10 @@
 import createDynamicImportWithRetry, {
   _parseModuleUrlFromImporterBody as parseBody,
-} from "./dynamic-import-with-retry";
+} from "./retry";
 
-import debug from 'debug'
+import debug from "debug";
 
-const logger = debug('dynamic-import:test')
+const logger = debug("dynamic-import:test");
 
 // Not able to get this working for some reason? It cannot find the export
 //import type {StrategyName} from  "./dynamic-import-with-retry";
@@ -32,9 +32,14 @@ describe("path parsing of importer function", () => {
 describe("createDynamicImportWithRetry bust the cache of a module using the current time", () => {
   const path = "./foo-a123.js";
 
-  const testRetryImportUsingStrategy = async (strategy: string, expectedPrefix:string) => {
+  const testRetryImportUsingStrategy = async (
+    strategy: string,
+    expectedPrefix: string
+  ) => {
     const body = `
-      throw new TypeError("Failed to fetch dynamically imported module: https://localhost:1234/assets/${path.slice(2)}");
+      throw new TypeError("Failed to fetch dynamically imported module: https://localhost:1234/assets/${path.slice(
+        2
+      )}");
 
       // required to parse the path
       return import("${path}");`;
@@ -47,19 +52,26 @@ describe("createDynamicImportWithRetry bust the cache of a module using the curr
 
     const dynamicImportWithRetry = createDynamicImportWithRetry(1, {
       importFunction: importStub,
-        strategy: strategy as any,
-        logger
+      strategy: strategy as any,
+      logger,
     });
 
-    const /* ignored */ _promise = dynamicImportWithRetry(originalImport as any);
+    const /* ignored */ _promise = dynamicImportWithRetry(
+        originalImport as any
+      );
     await clock.advanceTimersByTimeAsync(1000);
 
     expect(importStub).toHaveBeenCalledTimes(1);
     expect(importStub).toBeCalledWith(
       `${expectedPrefix}/foo-a123.js?t=1500` /* 1000 + 2^-1*/
     );
-  }
+  };
 
-    test('it works using parsing of module name in importer body', () => testRetryImportUsingStrategy('PARSE_IMPORTER_FUNCTION_BODY' as const, '.'))
-    test('it works using parsing of Chromium error messages', () => testRetryImportUsingStrategy('PARSE_ERROR_MESSAGE' as const, 'https://localhost:1234/assets'))
+  test("it works using parsing of module name in importer body", () =>
+    testRetryImportUsingStrategy("PARSE_IMPORTER_FUNCTION_BODY" as const, "."));
+  test("it works using parsing of Chromium error messages", () =>
+    testRetryImportUsingStrategy(
+      "PARSE_ERROR_MESSAGE" as const,
+      "https://localhost:1234/assets"
+    ));
 });
