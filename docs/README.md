@@ -8,6 +8,7 @@ Completed improvements:
 
 - ✅ unit tests
 - ✅ support non-Chromium browsers (like Firefox)
+- ✅ tree shakeable (does not pull in React if you just use the non-react bits)
 - ❌ cache previous resolutions
 
 ## Why not just catch a failure and reload the page?
