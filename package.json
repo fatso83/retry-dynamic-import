@@ -19,10 +19,9 @@
     "postversion": "npm publish",
     "test": "jest"
   },
-  "exports": {
-    ".": "./dist/index.js",
-    "./react-lazy": "./dist/react-lazy.js"
-  },
+  "exports": "./dist/index.js",
+  "types": "./types/index.d.ts",
+  "sideEffects": false,
   "files": [
     "dist/*.js",
     "types/*.d.ts"

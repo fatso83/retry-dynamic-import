@@ -62,9 +62,9 @@ See the unit tests or the implementation for what options it supports.
 
 ### React utility
 
-Additionallly, you can `import reactLazyWithRetry from '@fatso83/retry-dynamic-import/react-lazy'` for a utility that can be used instead of React.lazy() for lazy imports with retries.
+Additionallly, you can `import {reactLazyWithRetry} from '@fatso83/retry-dynamic-import'` for a utility that can be used instead of React.lazy() for lazy imports with retries.
 
-_React is not a dependency of this package_, which means you can use it with Svelte or VanillaJS without pulling in extra dependencies, but if you use the `react-lazy` sub-export you will of course need to have React in your dependency tree :)
+_React is not a dependency of this package_, which means you can use it with Svelte or VanillaJS without pulling in extra dependencies, but if you use the `react-lazy` sub-export you will of course need to have React in your dependency tree :) It is also marked as [side-effect free, so any React imports are pruned][pruning] if you do not use this library.
 
 ### reactLazyWithRetry
 
@@ -91,3 +91,5 @@ const App = () => (
 Please do!
 
 - Run tests: `DEBUG=dynamic-import:* npm t -- --watch` (the env var is just for verbose output)
+
+[pruning]: https://github.com/vitejs/vite/discussions/13171
