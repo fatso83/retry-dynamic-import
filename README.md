@@ -16,7 +16,7 @@ While that works fine in Firefox, in Chromium based browsers (Edge, Chrome, ...)
 
 ## Demo?
 
-1. Open the [demo application that is deployed on Github Pages](https://fatso83.github.io/retry-dynamic-import)
+1. Open the [demo application that is deployed on Github Pages](https://fatso83.github.io/retry-dynamic-import/demo)
 2. Open DevTools and refresh the page
 3. Right click on the ExpensiveComponent.\* url and choose to block it
 4. Refresh and see the network requests fail in the Network tab of DevTools
