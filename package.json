@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "prebuild": "rimraf types dist demo/dist",
+    "dev": "jest --watch",
     "dev:demo": "vite -c demo/vite.config.ts --force demo/ ",
     "build:demo-gh-pages": "npm run build:demo -- --base=/retry-dynamic-import",
     "build:demo": "tsc && vite build -c demo/vite.config.ts demo",

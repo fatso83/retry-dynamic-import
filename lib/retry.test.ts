@@ -46,9 +46,11 @@ describe("createDynamicImportWithRetry bust the cache of a module using the curr
 
     const originalImport = new Function(body);
 
-    const clock = jest.useFakeTimers({ now: 1000, doNotFake: [] });
+    const clock = jest.useFakeTimers({ now: 0, doNotFake: [] });
     const importStub = jest.fn();
-    importStub.mockResolvedValueOnce("export default () => <div>42</div>");
+    importStub
+      .mockRejectedValueOnce(new Error("Failed loading for some reason"))
+      .mockResolvedValueOnce("export default () => <div>42</div>");
 
     const dynamicImportWithRetry = createDynamicImportWithRetry(1, {
       importFunction: importStub,
@@ -61,9 +63,16 @@ describe("createDynamicImportWithRetry bust the cache of a module using the curr
       );
     await clock.advanceTimersByTimeAsync(1000);
 
-    expect(importStub).toHaveBeenCalledTimes(1);
+    expect(importStub).toHaveBeenCalledTimes(2);
+
+    // should fail
     expect(importStub).toBeCalledWith(
-      `${expectedPrefix}/foo-a123.js?t=1500` /* 1000 + 2^-1*/
+      `${expectedPrefix}/foo-a123.js?t=0` /* 0 */
+    );
+
+    // success call
+    expect(importStub).toBeCalledWith(
+      `${expectedPrefix}/foo-a123.js?t=500` /* 0 + 2^-1*/
     );
   };
 
