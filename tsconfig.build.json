@@ -15,7 +15,9 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "outDir": "dist",
-    "declaration": true
+    "declaration": true,
+    "declarationDir": "types",
+    "emitDeclarationOnly": true
   },
   "include": ["lib/"],
   "exclude": ["lib/*.test.ts"]

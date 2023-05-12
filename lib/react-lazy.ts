@@ -1,5 +1,5 @@
 import React from "react";
-import createDynamicImportWithRetry from "./dynamic-import-with-retry";
+import createDynamicImportWithRetry from "./retry";
 
 const defaultDynamicImportWithRetry = createDynamicImportWithRetry(5);
 /**

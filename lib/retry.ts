@@ -9,9 +9,7 @@ const noop = () => {};
 
 const identity = (e: any) => e;
 const uriOrRelativePathRegex = /"((\w+:(\/?\/?))?[^\s]+)"/;
-function parseModulePathFromImporterBody(
-  importer: () => any
-): string | null {
+function parseModulePathFromImporterBody(importer: () => any): string | null {
   const fnString = importer.toString();
   const match = fnString.match(uriOrRelativePathRegex);
   if (!match) return null;
@@ -19,7 +17,9 @@ function parseModulePathFromImporterBody(
 }
 
 type UrlStrategy = (error: Error, importer: () => any) => string | null;
-export type StrategyName = "PARSE_ERROR_MESSAGE" | "PARSE_IMPORTER_FUNCTION_BODY";
+export type StrategyName =
+  | "PARSE_ERROR_MESSAGE"
+  | "PARSE_IMPORTER_FUNCTION_BODY";
 
 const strategies: Record<StrategyName, UrlStrategy> = {
   /** This only works in Chromium browsers, as other engines (like Firefox) do not carry the module url in the error message */
@@ -84,7 +84,10 @@ export default function createDynamicImportWithRetry<T extends number>(
 
         // add a timestamp to the url to force a reload the module (and not use the cached version - cache busting)
         let cacheBustedPath = `${modulePath}?t=${+new Date()}`;
-        logger(Date.now(), `Trying importing using module url set to ${cacheBustedPath}`);
+        logger(
+          Date.now(),
+          `Trying importing using module url set to ${cacheBustedPath}`
+        );
 
         try {
           return await importFunction(cacheBustedPath);

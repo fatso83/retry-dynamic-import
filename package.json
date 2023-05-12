@@ -1,24 +1,30 @@
 {
   "name": "@fatso83/retry-dynamic-import",
   "private": false,
-  "version": "1.0.7",
+  "version": "1.1.0-rc1",
   "type": "module",
   "scripts": {
-    "clean": "rimraf dist demo/dist",
+    "prebuild": "rimraf types dist demo/dist",
     "dev:demo": "vite -c demo/vite.config.ts --force demo/ ",
-    "build:demo-gh-pages": "tsc && vite build --base=/retry-dynamic-import -c demo/vite.config.ts demo",
-    "build:dist": "tsc --project ./tsconfig.build.json --outDir dist",
-    "build": "npm run clean && run-p build:*",
+    "build:demo-gh-pages": "npm run build:demo -- --base=/retry-dynamic-import",
+    "build:demo": "tsc && vite build -c demo/vite.config.ts demo",
+    "build:types": "tsc --project ./tsconfig.build.json",
+    "build:dist": "vite build",
+    "build": "run-p build:*",
+    "prepreview:demo": "npm run build:demo",
     "preview:demo": "vite preview -c demo/vite.config.ts demo/",
     "prepublishOnly": "npm run build",
     "postpublish": "./scripts/postpublish.sh",
     "postversion": "npm publish",
     "test": "jest"
   },
-  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js",
+    "./react-lazy": "./dist/react-lazy.js"
+  },
   "files": [
     "dist/*.js",
-    "dist/*.d.ts"
+    "types/*.d.ts"
   ],
   "devDependencies": {
     "@types/debug": "^4.1.7",
@@ -40,9 +46,5 @@
     "ts-node": "^10.9.1",
     "typescript": "5",
     "vite": "4"
-  },
-  "optionalDependencies": {
-    "react": ">=17",
-    "react-dom": ">=17"
   }
 }
