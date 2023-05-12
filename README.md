@@ -54,8 +54,7 @@ export const createDynamicImportWithRetry  // factory to make your own version o
 > Works in any framework
 
 ```typescript
-const dynamicImportWithRetry = createDynamicImportWithRetry(5);
-
+import {dynamicImportWithRetry} from '@fatso83/retry-dynamic-import';
 const myModule = dynamicImportWithRetry(() => import("./my-module")); // this works regardless of framework, lib, etc
 ```
 
