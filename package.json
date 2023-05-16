@@ -8,7 +8,7 @@
     "dev": "jest --watch",
     "dev:demo": "vite -c demo/vite.config.ts --force demo/ ",
     "build:demo-gh-pages": "npm run build:demo -- --base=/retry-dynamic-import",
-    "build:demo": "tsc && vite build -c demo/vite.config.ts demo",
+    "build:demo": "tsc && cd demo && npm run build",
     "build:types": "tsc --project ./tsconfig.build.json",
     "build:dist": "vite build",
     "build": "run-p build:*",
@@ -33,19 +33,14 @@
     "@types/node": "^20.1.1",
     "@types/react": "^18.2.6",
     "@types/react-dom": "^18.2.4",
-    "@vitejs/plugin-react": "^4.0.0",
     "debug": "^4.3.4",
-    "esbuild": "0.17.18",
     "jest": "^29.5.0",
     "npm-run-all": "^4.1.5",
     "prettier": "2.8.8",
-    "react": "^18.2.0",
-    "react-confetti": "^6.1.0",
-    "react-dom": "^18.2.0",
     "rimraf": "^5.0.0",
     "ts-jest": "^29.1.0",
     "ts-node": "^10.9.1",
     "typescript": "5",
-    "vite": "4"
+    "vite": "^4.3.6"
   }
 }
