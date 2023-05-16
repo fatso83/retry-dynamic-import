@@ -5,11 +5,12 @@
   "scripts": {
     "dev": "vite dev",
     "build": "npm run build:ts-default",
-    "build:ts-default": "vite build ./typescript-moduleresolution-default",
+    "build:ts-default": "npx tsc --noEmit typescript-moduleresolution-default/src/main.ts && vite build ./typescript-moduleresolution-default",
     "test": "npm run build > /dev/null && ! (grep -i react typescript-moduleresolution-default/dist/assets/*)"
   },
   "dependencies": {
     "@fatso83/retry-dynamic-import": "file:..",
+    "typescript": "^5.0.4",
     "vite": "^4.3.6"
   }
 }

@@ -23,6 +23,8 @@
     ".": "./dist/index.js",
     "./react-lazy": "./dist/react-lazy.js"
   },
+  "main": "./dist/index.js",
+  "types": "./types/index.d.ts",
   "files": [
     "dist/*.js",
     "types/*.d.ts"
