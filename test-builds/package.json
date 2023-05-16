@@ -1,12 +1,13 @@
 {
   "name": "no-react",
   "version": "1.0.0",
-  "description": "Just tests bundling",
+  "description": "Just tests that bundling does not pull in React and that Typescript definitions work in all module resolutions",
   "scripts": {
     "dev": "vite dev",
     "build": "npm run build:ts-default",
     "build:ts-default": "npx tsc --noEmit typescript-moduleresolution-default/src/main.ts && vite build ./typescript-moduleresolution-default",
-    "test": "npm run build > /dev/null && ! (grep -i react typescript-moduleresolution-default/dist/assets/*)"
+    "build:ts-nodenext": "npx tsc --noEmit --allowImportingTsExtensions --moduleResolution nodenext typescript-moduleresolution-nodenext/src/main.ts",
+    "test": "npm run build > /dev/null && ! (grep -i react typescript-moduleresolution-*/dist/assets/*)"
   },
   "dependencies": {
     "@fatso83/retry-dynamic-import": "file:..",
