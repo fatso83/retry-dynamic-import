@@ -15,10 +15,6 @@ import type reactLazy from "./react-lazy.d.ts"
 
 declare module "@fatso83/retry-dynamic-import/react-lazy" {
     export default reactLazy
-}
-
-declare module "@fatso83/retry-dynamic-import/react-lazy.js" {
-    export default reactLazy
 }' >> types/index-all.d.ts
 
 rm -r pkg || :
