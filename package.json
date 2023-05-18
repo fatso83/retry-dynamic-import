@@ -7,7 +7,7 @@
     "prebuild": "rimraf types dist demo/dist pkg",
     "dev": "jest --watch",
     "dev:demo": "vite -c demo/vite.config.ts --force demo/ ",
-    "build:demo-gh-pages": "npm run build:demo -- --base=/retry-dynamic-import",
+    "build:demo-gh-pages": "npm run build:demo -- --base=/retry-dynamic-import/demo",
     "build:demo": "tsc && cd demo && npm run build --",
     "build:types": "tsc --project ./tsconfig.build.json",
     "build:dist": "vite build",
