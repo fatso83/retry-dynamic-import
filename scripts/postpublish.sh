@@ -9,6 +9,7 @@ if [ ! -e package.json ]; then
 fi
 
 VERSION=`jq .version package.json`
+git checkout test-builds/package-lock.json
 git checkout gh-pages
 git merge main -m "Merging main into gh-pages"
 npm run build:demo-gh-pages
