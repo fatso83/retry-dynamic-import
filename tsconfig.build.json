@@ -2,11 +2,16 @@
   "compilerOptions": {
     "target": "ESNext",
     "useDefineForClassFields": true,
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ESNext"
+    ],
     "allowJs": false,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "allowImportingTsExtensions": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "module": "es2020",
@@ -19,6 +24,10 @@
     "declarationDir": "types",
     "emitDeclarationOnly": true
   },
-  "include": ["lib/"],
-  "exclude": ["lib/*.test.ts"]
+  "include": [
+    "lib/"
+  ],
+  "exclude": [
+    "lib/*.test.ts"
+  ]
 }

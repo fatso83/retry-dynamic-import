@@ -20,14 +20,14 @@
     "test": "jest"
   },
   "exports": {
-    ".": "./dist/index.js",
-    "./react-lazy": "./dist/react-lazy.js"
+    ".": "./index.js",
+    "./react-lazy": "./react-lazy.js"
   },
-  "main": "./dist/index.js",
-  "types": "./types/index.d.ts",
+  "main": "./index.js",
+  "types": "./index-all.d.ts",
   "files": [
-    "dist/*.js",
-    "types/*.d.ts"
+    "*.js",
+    "*.d.ts"
   ],
   "devDependencies": {
     "@types/debug": "^4.1.7",

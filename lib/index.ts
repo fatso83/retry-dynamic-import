@@ -1,4 +1,4 @@
-import _createDynamicImportWithRetry from "./retry";
+import _createDynamicImportWithRetry from "./retry.ts";
 
 const defaultDynamicImportWithRetry = _createDynamicImportWithRetry(5);
 
