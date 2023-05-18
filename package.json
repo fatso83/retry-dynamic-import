@@ -15,8 +15,6 @@
     "postpack": "echo running pack $@ && exit 0 ",
     "prepreview:demo": "npm run build:demo",
     "preview:demo": "vite preview -c demo/vite.config.ts demo/",
-    "prepublishOnly": "./scripts/prepublish.sh",
-    "postpublish": "./scripts/postpublish.sh",
     "postversion": "./scripts/publish.sh",
     "test": "jest",
     "test-consumers": "cd test-builds && npm i && npm t"

@@ -1,9 +1,13 @@
 #Exit on error
 set -e
 
-if [ ! -e package.json ]; then
-    echo "Run me from the package root, please"
-    exit 1
-fi
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd $SCRIPT_DIR/..
+
+export PATH=$(npm bin):$PATH
+
+./scripts/prepublish.sh
 
 npm publish ./pkg
+
+./scripts/postpublish.sh

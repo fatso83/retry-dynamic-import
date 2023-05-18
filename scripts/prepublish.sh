@@ -1,10 +1,9 @@
-#!/bin/sh
+#!/bin/bash
 
-#Exit on error
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd $SCRIPT_DIR/..
+
 set -e
-if [ ! -e package.json ]; then
-    echo "Run me from the package root, please"
-    exit 1
-fi
+export PATH=$(npm bin):$PATH
 
 run-s test build test-consumers
