@@ -1,4 +1,5 @@
-import React from "react";
+import * as React from "react";
+
 import createDynamicImportWithRetry from "./retry";
 
 const defaultDynamicImportWithRetry = createDynamicImportWithRetry(5);
