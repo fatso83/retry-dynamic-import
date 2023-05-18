@@ -1,10 +1,10 @@
 # Retry dynamic imports
 
 > Retry dynamic imports using cache busting and exponential backoff
-> 
+ 
 <a href="https://www.npmjs.com/package/@fatso83/retry-dynamic-import/"><img src="https://img.shields.io/npm/v/@fatso83/retry-dynamic-import.svg?style=flat" alt="npm version"></a>
 
-This is a fork of Alon Mizrahi's work, made available as a package and with additional improvements
+This is a fork of Alon Mizrahi's work, made available as a package and with quite a few improvements
 
 Completed improvements:
 
@@ -12,6 +12,7 @@ Completed improvements:
 - ✅ support non-Chromium browsers (like Firefox)
 - ✅ tree shakeable (does not pull in React if you just use the non-react bits)
 - ✅ speed up resolution on afflicted clients by not waiting for first cache busting attempt
+- ✅ fix exports to work with Typescript using both NodeNext and "classic" module resolution
 - ❌ dual exports (currently just ESM), shout out if you want it (we already produce the `*.cjs` files)
 
 ## Why not just catch a failure and reload the page?
@@ -62,9 +63,10 @@ See the unit tests or the implementation for what options it supports.
 
 ### React utility
 
-Additionallly, you can `import reactLazyWithRetry from '@fatso83/retry-dynamic-import/react-lazy'` for a utility that can be used instead of React.lazy() for lazy imports with retries.
+Additionallly, you can `import reactLazyWithRetry from '@fatso83/retry-dynamic-import/react-lazy'` for a utility that can be used instead of React.lazy() for lazy imports with retries. In version 1.* this was exposed on root, but most bundles were [unable to tree-shake React][issue-1], so I decided to make a breaking change for version 2 that exposes it as subpath export.
 
-_React is not a dependency of this package_, which means you can use it with Svelte or VanillaJS without pulling in extra dependencies, but if you use the `react-lazy` sub-export you will of course need to have React in your dependency tree :)
+_React is an _optional_ dependency of this package_, which means you can use it with Svelte or VanillaJS without pulling in extra dependencies by specifying `npm install --omit=optional`, but if you use the `react-lazy` sub-export you will of course need to have React in your dependency tree :)
+
 
 ### reactLazyWithRetry
 
@@ -91,3 +93,5 @@ const App = () => (
 Please do!
 
 - Run tests: `DEBUG=dynamic-import:* npm t -- --watch` (the env var is just for verbose output)
+
+[issue-1]: https://github.com/fatso83/retry-dynamic-import/issues/1

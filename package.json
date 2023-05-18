@@ -4,30 +4,31 @@
   "version": "2.0.0",
   "type": "module",
   "scripts": {
-    "prebuild": "rimraf types dist demo/dist",
+    "prebuild": "rimraf types dist demo/dist pkg",
     "dev": "jest --watch",
     "dev:demo": "vite -c demo/vite.config.ts --force demo/ ",
     "build:demo-gh-pages": "npm run build:demo -- --base=/retry-dynamic-import",
     "build:demo": "tsc && cd demo && npm run build",
     "build:types": "tsc --project ./tsconfig.build.json",
     "build:dist": "vite build",
-    "build": "run-p build:*",
+    "build": "run-p build:* && ./scripts/make-package.sh",
     "prepreview:demo": "npm run build:demo",
     "preview:demo": "vite preview -c demo/vite.config.ts demo/",
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "run-s test build test-consumers",
     "postpublish": "./scripts/postpublish.sh",
     "postversion": "npm publish",
-    "test": "jest"
+    "test": "jest",
+    "test-consumers": "cd test-builds && npm i && npm t"
   },
   "exports": {
-    ".": "./dist/index.js",
-    "./react-lazy": "./dist/react-lazy.js"
+    ".": "./index.js",
+    "./react-lazy": "./react-lazy.js"
   },
-  "main": "./dist/index.js",
-  "types": "./types/index.d.ts",
+  "main": "./index.js",
+  "types": "./index-all.d.ts",
   "files": [
-    "dist/*.js",
-    "types/*.d.ts"
+    "*.js",
+    "*.d.ts"
   ],
   "devDependencies": {
     "@types/debug": "^4.1.7",
@@ -44,5 +45,8 @@
     "ts-node": "^10.9.1",
     "typescript": "5",
     "vite": "^4.3.6"
+  },
+  "optionalDependencies": {
+    "react": "> 16.6.0"
   }
 }
