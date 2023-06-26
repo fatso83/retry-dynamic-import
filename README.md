@@ -64,7 +64,7 @@ See the unit tests or the implementation for what options it supports.
 
 ### React utility
 
-Additionallly, you can `import reactLazyWithRetry from '@fatso83/retry-dynamic-import/react-lazy'` for a utility that can be used instead of React.lazy() for lazy imports with retries. In version 1.* this was exposed on root, but most bundles were [unable to tree-shake React][issue-1], so I decided to make a breaking change for version 2 that exposes it as subpath export.
+Additionallly, you can `import reactLazyWithRetry from '@fatso83/retry-dynamic-import/react-lazy'` for a utility that can be used instead of React.lazy() for lazy imports with retries. In version 1.* this was exposed on root, but most bundlers were [unable to tree-shake React][issue-1], so I decided to make a breaking change for version 2 that exposes it as subpath export.
 
 _React is an _optional_ dependency of this package_, which means you can use it with Svelte or VanillaJS without pulling in extra dependencies by specifying `npm install --omit=optional`, but if you use the `react-lazy` sub-export you will of course need to have React in your dependency tree :)
 
