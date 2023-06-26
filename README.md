@@ -4,7 +4,8 @@
  
 <a href="https://www.npmjs.com/package/@fatso83/retry-dynamic-import/"><img src="https://img.shields.io/npm/v/@fatso83/retry-dynamic-import.svg?style=flat" alt="npm version"></a>
 
-This is a fork of Alon Mizrahi's work, made available as a package and with quite a few improvements
+This is a fork of Alon Mizrahi's work, made available as a package and with quite a few improvements. The new code no longer uses Alon's approach, which was relying on parsing
+error messages with a format that was Chromium specific, and has a new approach that works in Firefox and others as well.
 
 Completed improvements:
 
