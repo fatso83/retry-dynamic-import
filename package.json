@@ -12,13 +12,14 @@
     "build:types": "tsc --project ./tsconfig.build.json",
     "build:dist": "vite build",
     "build": "run-p build:* && ./scripts/make-package.sh",
+    "postinstall": "cd demo && npm i; cd ../test-builds && npm i",
     "postpack": "echo running pack $@ && exit 0 ",
     "prepreview:demo": "npm run build:demo",
     "preview:demo": "vite preview -c demo/vite.config.ts demo/",
     "preversion": "./scripts/preversion.sh",
     "postversion": "./scripts/publish.sh",
     "test": "jest",
-    "test-consumers": "cd test-builds && npm i && npm t"
+    "test-consumers": "cd test-builds && npm t"
   },
   "exports": {
     ".": "./index.js",
