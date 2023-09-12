@@ -4,6 +4,12 @@
  
 <a href="https://www.npmjs.com/package/@fatso83/retry-dynamic-import/"><img src="https://img.shields.io/npm/v/@fatso83/retry-dynamic-import.svg?style=flat" alt="npm version"></a>
 
+Did you know that the [HTML spec][html spec] demands that failed dynamic import resolutions are to be cached? Turns out, most people do not and only get to know this once they deploy apps using dynamic imports to production and start seeing weird errors after some time. Neither did I, and I ended up doing [a whole lot of debugging and googling][so-answer] after receiving mysterious bug reports from users before I found the [WHATWG issue][html spec issue] for exactly this situation. Since this has been at a stand still since 2021, I ended up creating this library to work around the issues.
+
+[html spec]: https://html.spec.whatwg.org/#fetch-a-single-module-script
+[html spec issue]: https://github.com/whatwg/html/issues/6768
+[so-answer]: https://stackoverflow.com/a/76200536/200987
+
 This is a fork of Alon Mizrahi's work, made available as a package and with quite a few improvements. The new code no longer uses Alon's approach, which was relying on parsing
 error messages with a format that was Chromium specific, and has a new approach that works in Firefox and others as well.
 
