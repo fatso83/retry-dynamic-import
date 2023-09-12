@@ -4,7 +4,14 @@
  
 <a href="https://www.npmjs.com/package/@fatso83/retry-dynamic-import/"><img src="https://img.shields.io/npm/v/@fatso83/retry-dynamic-import.svg?style=flat" alt="npm version"></a>
 
-This is a fork of Alon Mizrahi's work, made available as a package and with quite a few improvements
+Did you know that the [HTML spec][html spec] demands that failed dynamic import resolutions are to be cached? Turns out, most people do not and only get to know this once they deploy apps using dynamic imports to production and start seeing weird errors after some time. Neither did I, and I ended up doing [a whole lot of debugging and googling][so-answer] after receiving mysterious bug reports from users before I found the [WHATWG issue][html spec issue] for exactly this situation. Since this has been at a stand still since 2021, I ended up creating this library to work around the issues.
+
+[html spec]: https://html.spec.whatwg.org/#fetch-a-single-module-script
+[html spec issue]: https://github.com/whatwg/html/issues/6768
+[so-answer]: https://stackoverflow.com/a/76200536/200987
+
+This is a fork of Alon Mizrahi's work, made available as a package and with quite a few improvements. The new code no longer uses Alon's approach, which was relying on parsing
+error messages with a format that was Chromium specific, and has a new approach that works in Firefox and others as well.
 
 Completed improvements:
 
@@ -63,7 +70,7 @@ See the unit tests or the implementation for what options it supports.
 
 ### React utility
 
-Additionallly, you can `import reactLazyWithRetry from '@fatso83/retry-dynamic-import/react-lazy'` for a utility that can be used instead of React.lazy() for lazy imports with retries. In version 1.* this was exposed on root, but most bundles were [unable to tree-shake React][issue-1], so I decided to make a breaking change for version 2 that exposes it as subpath export.
+Additionallly, you can `import reactLazyWithRetry from '@fatso83/retry-dynamic-import/react-lazy'` for a utility that can be used instead of React.lazy() for lazy imports with retries. In version 1.* this was exposed on root, but most bundlers were [unable to tree-shake React][issue-1], so I decided to make a breaking change for version 2 that exposes it as subpath export.
 
 _React is an _optional_ dependency of this package_, which means you can use it with Svelte or VanillaJS without pulling in extra dependencies by specifying `npm install --omit=optional`, but if you use the `react-lazy` sub-export you will of course need to have React in your dependency tree :)
 

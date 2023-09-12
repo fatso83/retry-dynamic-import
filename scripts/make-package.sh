@@ -17,7 +17,7 @@ declare module "@fatso83/retry-dynamic-import/react-lazy" {
     export default reactLazy
 }' >> types/index-all.d.ts
 
-rm -r pkg || :
+rm -r pkg 2>/dev/null || :
 mkdir pkg || :
 cp -a dist/* pkg/
 cp -a types/* pkg/
