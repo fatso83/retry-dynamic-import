@@ -9,8 +9,12 @@ if [ ! -e package.json ]; then
 fi
 
 VERSION=`jq .version package.json`
+git fetch --all
+git checkout main
+git rebase
 git checkout test-builds/package-lock.json
 git checkout gh-pages
+git reset --hard origin/gh-pages
 git merge main -m "Merging main into gh-pages"
 npm run build:demo-gh-pages
 rm -r docs && mkdir -p docs/demo
