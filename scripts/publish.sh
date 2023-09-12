@@ -6,8 +6,7 @@ cd $SCRIPT_DIR/..
 
 export PATH=$(npm bin):$PATH
 
-./scripts/prepublish.sh
-
+./scripts/make-package.sh
 npm publish ./pkg
 
 ./scripts/postpublish.sh
