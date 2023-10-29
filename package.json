@@ -3,6 +3,14 @@
   "private": false,
   "version": "2.0.3",
   "type": "module",
+  "author": "Carl-Erik Kopseng",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/fatso83/retry-dynamic-import.git"
+  },
+  "bugs": {
+    "url": "http://github.com/fatso83/retry-dynamic-import/issues"
+  },
   "scripts": {
     "prebuild": "rimraf types dist demo/dist pkg",
     "dev": "jest --watch",
