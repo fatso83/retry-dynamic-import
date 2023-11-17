@@ -30,11 +30,10 @@
     "test-consumers": "cd test-builds && npm t"
   },
   "exports": {
-    ".": "./index.js",
-    "./react-lazy": "./react-lazy.js"
+    ".": "./lib/index.ts",
+    "./react-lazy": "./lib/react-lazy.ts"
   },
-  "main": "./index.js",
-  "types": "./index-all.d.ts",
+  "main": "./lib/index.ts",
   "files": [
     "*.js",
     "*.d.ts"
