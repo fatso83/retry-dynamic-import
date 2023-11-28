@@ -1,7 +1,7 @@
 {
   "name": "@fatso83/retry-dynamic-import",
   "private": false,
-  "version": "2.0.5",
+  "version": "2.1.0",
   "type": "module",
   "author": "Carl-Erik Kopseng",
   "repository": {
