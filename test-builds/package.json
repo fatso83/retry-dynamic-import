@@ -11,6 +11,7 @@
     "typecheck:ts-react-default": "tsc --noEmit --allowImportingTsExtensions  typescript-react-moduleresolution-default/src/main.ts",
     "typecheck:ts-nodenext": "npx tsc --noEmit --allowImportingTsExtensions --moduleResolution nodenext typescript-moduleresolution-nodenext/src/main.ts",
     "typecheck": "run-p typecheck:*",
+    "pretest": "../scripts/workaround-for-tsc-symlink-issue.sh",
     "test": "run-s typecheck build && ! (grep -i react typescript-moduleresolution-*/dist/assets/*)"
   },
   "dependencies": {
