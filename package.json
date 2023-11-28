@@ -1,7 +1,7 @@
 {
   "name": "@fatso83/retry-dynamic-import",
   "private": false,
-  "version": "2.0.4",
+  "version": "2.1.0",
   "type": "module",
   "author": "Carl-Erik Kopseng",
   "repository": {
@@ -12,7 +12,8 @@
     "url": "http://github.com/fatso83/retry-dynamic-import/issues"
   },
   "scripts": {
-    "prebuild": "rimraf types dist demo/dist pkg",
+    "clean": "rimraf types dist demo/dist pkg",
+    "prebuild": "npm run clean",
     "dev": "jest --watch",
     "dev:demo": "vite -c demo/vite.config.ts --force demo/ ",
     "build:demo-gh-pages": "npm run build:demo -- --base=/retry-dynamic-import/demo",
@@ -20,7 +21,7 @@
     "build:types": "tsc --project ./tsconfig.build.json",
     "build:dist": "vite build",
     "build": "run-p build:* && ./scripts/make-package.sh",
-    "postinstall": "cd demo && npm i; cd ../test-builds && npm i",
+    "install-build-deps": "cd demo && npm i; cd ../test-builds && npm i",
     "postpack": "echo running pack $@ && exit 0 ",
     "prepreview:demo": "npm run build:demo",
     "preview:demo": "vite preview -c demo/vite.config.ts demo/",
