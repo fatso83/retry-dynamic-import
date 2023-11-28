@@ -8,7 +8,7 @@
     "dev": "vite dev",
     "build": "for f in typescript-*; do vite build $f; done",
     "typecheck:ts-default": "npx tsc --noEmit typescript-moduleresolution-default/src/main.ts",
-    "typecheck:ts-react-default": "tsc --noEmit --allowImportingTsExtensions  typescript-react-moduleresolution-default/src/main.ts",
+    "typecheck:ts-react-default": "tsc --noEmit --allowImportingTsExtensions  --jsx react typescript-react-moduleresolution-default/src/main.tsx",
     "typecheck:ts-nodenext": "npx tsc --noEmit --allowImportingTsExtensions --moduleResolution nodenext typescript-moduleresolution-nodenext/src/main.ts",
     "typecheck": "run-p typecheck:*",
     "pretest": "../scripts/workaround-for-tsc-symlink-issue.sh",
@@ -18,6 +18,7 @@
     "@fatso83/retry-dynamic-import": "file:../pkg",
     "npm-run-all": "^4.1.5",
     "react": "^18",
+    "react-dom": "^18.2.0",
     "typescript": "^5.0.4",
     "vite": "^4.3.6"
   }
