@@ -57,7 +57,7 @@ publish(){
 }
 
 postpublish(){
-    ecoh Running postpublish step
+    echo Running postpublish step
 
     git fetch --all
     git checkout main
@@ -76,4 +76,8 @@ postpublish(){
     git switch main
 }
 
-main
+if [[ $# == 1 ]]; then
+    eval $1
+else
+    main
+fi
