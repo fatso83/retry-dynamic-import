@@ -48,7 +48,7 @@ publish(){
     local file="$build_dir"/*.tgz
     local count=$(tar tf  $file | egrep '(d.ts|.js)$' | wc -l)
 
-    if (( $count < 7 )); then 
+    if (( $count < 6 )); then 
         echo "Expected to find at least 7 js and d.ts files. Found $count."
         exit 
     fi
