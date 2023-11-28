@@ -12,7 +12,8 @@
     "url": "http://github.com/fatso83/retry-dynamic-import/issues"
   },
   "scripts": {
-    "prebuild": "rimraf types dist demo/dist pkg",
+    "clean": "rimraf types dist demo/dist pkg",
+    "prebuild": "npm run clean",
     "dev": "jest --watch",
     "dev:demo": "vite -c demo/vite.config.ts --force demo/ ",
     "build:demo-gh-pages": "npm run build:demo -- --base=/retry-dynamic-import/demo",
