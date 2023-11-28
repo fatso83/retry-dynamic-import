@@ -35,7 +35,7 @@
     "./react-lazy": "./react-lazy.js"
   },
   "main": "./index.js",
-  "types": "./index-all.d.ts",
+  "types": "./index.d.ts",
   "files": [
     "*.js",
     "*.d.ts"
