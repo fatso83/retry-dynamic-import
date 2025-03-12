@@ -21,17 +21,19 @@ describe("path parsing of importer function", () => {
     // @ts-ignore
     return import("../some-module3");
   };
-  const viteImporterWithPreloadedDeps = function() { }
+  const viteImporterWithPreloadedDeps = function () {};
   // Vite can wrap dynamic import functions into something like the following
-  viteImporterWithPreloadedDeps.toString = function() {
-    return `()=>H(()=>import("./NeedsFooAndBar.js"),["assets/foo.js","assets/bar.js"])`
-  }
+  viteImporterWithPreloadedDeps.toString = function () {
+    return `()=>H(()=>import("./NeedsFooAndBar.js"),["assets/foo.js","assets/bar.js"])`;
+  };
 
   it("should work", () => {
     expect(parseBody(importer1)).toEqual("./some-module1");
     expect(parseBody(importer2)).toEqual("some-module2");
     expect(parseBody(importer3)).toEqual("../some-module3");
-    expect(parseBody(viteImporterWithPreloadedDeps)).toEqual("./NeedsFooAndBar.js");
+    expect(parseBody(viteImporterWithPreloadedDeps)).toEqual(
+      "./NeedsFooAndBar.js",
+    );
   });
 });
 
@@ -40,11 +42,11 @@ describe("createDynamicImportWithRetry bust the cache of a module using the curr
 
   const testRetryImportUsingStrategy = async (
     strategy: string,
-    expectedPrefix: string
+    expectedPrefix: string,
   ) => {
     const body = `
       throw new TypeError("Failed to fetch dynamically imported module: https://localhost:1234/assets/${path.slice(
-        2
+        2,
       )}");
 
       // required to parse the path
@@ -65,7 +67,7 @@ describe("createDynamicImportWithRetry bust the cache of a module using the curr
     });
 
     const /* ignored */ _promise = dynamicImportWithRetry(
-        originalImport as any
+        originalImport as any,
       ).catch(logger);
     await clock.advanceTimersByTimeAsync(1000);
 
@@ -73,12 +75,12 @@ describe("createDynamicImportWithRetry bust the cache of a module using the curr
 
     // should fail
     expect(importStubUsedInRetries).toBeCalledWith(
-      `${expectedPrefix}/foo-a123.js?t=0` /* 0 */
+      `${expectedPrefix}/foo-a123.js?t=0` /* 0 */,
     );
 
     // success call
     expect(importStubUsedInRetries).toBeCalledWith(
-      `${expectedPrefix}/foo-a123.js?t=500` /* 0 + 2^-1*/
+      `${expectedPrefix}/foo-a123.js?t=500` /* 0 + 2^-1*/,
     );
   };
 
@@ -87,6 +89,6 @@ describe("createDynamicImportWithRetry bust the cache of a module using the curr
   test("it works using parsing of Chromium error messages", () =>
     testRetryImportUsingStrategy(
       "PARSE_ERROR_MESSAGE" as const,
-      "https://localhost:1234/assets"
+      "https://localhost:1234/assets",
     ));
 });

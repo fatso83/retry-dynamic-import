@@ -1,1 +1,3 @@
-export default function MyModule({}){ return 42 }
+export default function MyModule({}) {
+  return 42;
+}

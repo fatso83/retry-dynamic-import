@@ -55,15 +55,19 @@ export default function createDynamicImportWithRetry<T extends number>(
     strategy: StrategyName;
     importFunction: () => Promise<any>;
     logger: (...args: any[]) => void;
-  }> = {}
-) {
+  }> = {},
+): <TImportReturn>(
+  importer: () => Promise<TImportReturn>,
+) => Promise<TImportReturn> {
   const resolvedOpts = {
     ...defaultOpts,
     ...opts,
   };
   const { logger, importFunction, strategy } = resolvedOpts;
 
-  return async (importer: () => Promise<any>) => {
+  return async <TImportReturn>(
+    importer: () => Promise<TImportReturn>,
+  ): Promise<TImportReturn> => {
     try {
       return await importer();
     } catch (error: any) {
@@ -84,7 +88,7 @@ export default function createDynamicImportWithRetry<T extends number>(
         let cacheBustedPath = `${modulePath}?t=${+new Date()}`;
         logger(
           Date.now(),
-          `Trying re-import module using cache busted path: ${cacheBustedPath}`
+          `Trying re-import module using cache busted path: ${cacheBustedPath}`,
         );
 
         try {
@@ -92,7 +96,7 @@ export default function createDynamicImportWithRetry<T extends number>(
         } catch (e) {
           logger(`Import for ${cacheBustedPath} failed`);
           await new Promise((resolve) =>
-            setTimeout(resolve, 1000 * 2 ** (i - 1))
+            setTimeout(resolve, 1000 * 2 ** (i - 1)),
           );
         }
       }
