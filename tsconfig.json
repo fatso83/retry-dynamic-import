@@ -2,11 +2,7 @@
   "compilerOptions": {
     "target": "ESNext",
     "useDefineForClassFields": true,
-    "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "ESNext"
-    ],
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "allowJs": false,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -21,10 +17,7 @@
     "moduleResolution": "Node",
     "module": "ESNext"
   },
-  "include": [
-    "lib/",
-    "demo/src"
-  ],
+  "include": ["lib/", "demo/src"],
   "references": [
     {
       "path": "./tsconfig.node.json"
