@@ -24,7 +24,7 @@ jobs:
                   cache: npm
             - name: Install dependencies
               run: |
-                  npm ci
+                  npm ci && npm run install-build-deps
             - name: run unit tests
               run: npm test
             - name: build
