@@ -1,0 +1,33 @@
+name: Node CI
+
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - "**"
+
+permissions:
+    contents: read
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v3
+            - name: Use Node.js 
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 22
+                  cache: npm
+            - name: Install dependencies
+              run: |
+                  npm ci && npm run install-build-deps
+            - name: run unit tests
+              run: npm test
+            - name: build
+              run: npm run build
+            - name: test consumers of package
+              run: npm run test-consumers

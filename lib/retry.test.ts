@@ -21,11 +21,17 @@ describe("path parsing of importer function", () => {
     // @ts-ignore
     return import("../some-module3");
   };
+  const viteImporterWithPreloadedDeps = function() { }
+  // Vite can wrap dynamic import functions into something like the following
+  viteImporterWithPreloadedDeps.toString = function() {
+    return `()=>H(()=>import("./NeedsFooAndBar.js"),["assets/foo.js","assets/bar.js"])`
+  }
 
   it("should work", () => {
     expect(parseBody(importer1)).toEqual("./some-module1");
     expect(parseBody(importer2)).toEqual("some-module2");
     expect(parseBody(importer3)).toEqual("../some-module3");
+    expect(parseBody(viteImporterWithPreloadedDeps)).toEqual("./NeedsFooAndBar.js");
   });
 });
 
@@ -47,31 +53,31 @@ describe("createDynamicImportWithRetry bust the cache of a module using the curr
     const originalImport = new Function(body);
 
     const clock = jest.useFakeTimers({ now: 0, doNotFake: [] });
-    const importStub = jest.fn();
-    importStub
+    const importStubUsedInRetries = jest.fn();
+    importStubUsedInRetries
       .mockRejectedValueOnce(new Error("Failed loading for some reason"))
       .mockResolvedValueOnce("export default () => <div>42</div>");
 
-    const dynamicImportWithRetry = createDynamicImportWithRetry(1, {
-      importFunction: importStub,
+    const dynamicImportWithRetry = createDynamicImportWithRetry(2, {
+      importFunction: importStubUsedInRetries,
       strategy: strategy as any,
       logger,
     });
 
     const /* ignored */ _promise = dynamicImportWithRetry(
         originalImport as any
-      );
+      ).catch(logger);
     await clock.advanceTimersByTimeAsync(1000);
 
-    expect(importStub).toHaveBeenCalledTimes(2);
+    expect(importStubUsedInRetries).toHaveBeenCalledTimes(2);
 
     // should fail
-    expect(importStub).toBeCalledWith(
+    expect(importStubUsedInRetries).toBeCalledWith(
       `${expectedPrefix}/foo-a123.js?t=0` /* 0 */
     );
 
     // success call
-    expect(importStub).toBeCalledWith(
+    expect(importStubUsedInRetries).toBeCalledWith(
       `${expectedPrefix}/foo-a123.js?t=500` /* 0 + 2^-1*/
     );
   };

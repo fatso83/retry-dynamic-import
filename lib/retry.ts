@@ -8,7 +8,7 @@ type PositiveInteger<T extends number> = `${T}` extends
 const noop = () => {};
 
 const identity = (e: any) => e;
-const uriOrRelativePathRegex = /"((\w+:(\/?\/?))?[^\s]+)"/;
+const uriOrRelativePathRegex = /"((\w+:(\/?\/?))?[^\s,]+)"/;
 function parseModulePathFromImporterBody(importer: () => any): string | null {
   const fnString = importer.toString();
   const match = fnString.match(uriOrRelativePathRegex);
@@ -79,9 +79,8 @@ export default function createDynamicImportWithRetry<T extends number>(
       }
 
       // retry x times with 2 second delay base and backoff factor of 2 (1/2, 1, 2, 4, 8 seconds)
-      //
-      for (let i = -1; i < maxRetries; i++) {
-        // add a timestamp to the url to force a reload the module (and not use the cached version - cache busting)
+      for (let i = 0; i < maxRetries; i++) {
+        // add a timestamp to the url to force a reload of the module (and not use the cached version - cache busting)
         let cacheBustedPath = `${modulePath}?t=${+new Date()}`;
         logger(
           Date.now(),
@@ -92,7 +91,9 @@ export default function createDynamicImportWithRetry<T extends number>(
           return await importFunction(cacheBustedPath);
         } catch (e) {
           logger(`Import for ${cacheBustedPath} failed`);
-          await new Promise((resolve) => setTimeout(resolve, 1000 * 2 ** i));
+          await new Promise((resolve) =>
+            setTimeout(resolve, 1000 * 2 ** (i - 1))
+          );
         }
       }
       throw error;
