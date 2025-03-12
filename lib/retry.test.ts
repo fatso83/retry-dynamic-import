@@ -66,7 +66,7 @@ describe("createDynamicImportWithRetry bust the cache of a module using the curr
 
     const /* ignored */ _promise = dynamicImportWithRetry(
         originalImport as any
-      ).catch(console.log);
+      ).catch(logger);
     await clock.advanceTimersByTimeAsync(1000);
 
     expect(importStubUsedInRetries).toHaveBeenCalledTimes(2);
