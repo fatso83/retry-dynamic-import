@@ -79,9 +79,8 @@ export default function createDynamicImportWithRetry<T extends number>(
       }
 
       // retry x times with 2 second delay base and backoff factor of 2 (1/2, 1, 2, 4, 8 seconds)
-      //
       for (let i = 0; i < maxRetries; i++) {
-        // add a timestamp to the url to force a reload the module (and not use the cached version - cache busting)
+        // add a timestamp to the url to force a reload of the module (and not use the cached version - cache busting)
         let cacheBustedPath = `${modulePath}?t=${+new Date()}`;
         logger(
           Date.now(),
@@ -92,7 +91,9 @@ export default function createDynamicImportWithRetry<T extends number>(
           return await importFunction(cacheBustedPath);
         } catch (e) {
           logger(`Import for ${cacheBustedPath} failed`);
-          await new Promise((resolve) => setTimeout(resolve, 1000 * 2 ** (i-1)));
+          await new Promise((resolve) =>
+            setTimeout(resolve, 1000 * 2 ** (i - 1))
+          );
         }
       }
       throw error;
