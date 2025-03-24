@@ -21,6 +21,10 @@ describe("path parsing of importer function", () => {
     // @ts-ignore
     return import("../some-module3");
   };
+  const importer4 = function () {
+    // @ts-ignore
+    return import('./some-module4')
+  }
   const viteImporterWithPreloadedDeps = function () {};
   // Vite can wrap dynamic import functions into something like the following
   viteImporterWithPreloadedDeps.toString = function () {
@@ -31,6 +35,7 @@ describe("path parsing of importer function", () => {
     expect(parseBody(importer1)).toEqual("./some-module1");
     expect(parseBody(importer2)).toEqual("some-module2");
     expect(parseBody(importer3)).toEqual("../some-module3");
+    expect(parseBody(importer4)).toEqual("./some-module4");
     expect(parseBody(viteImporterWithPreloadedDeps)).toEqual(
       "./NeedsFooAndBar.js",
     );
