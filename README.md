@@ -10,8 +10,8 @@ Did you know that the [HTML spec][html spec] demands that failed dynamic import 
 [html spec issue]: https://github.com/whatwg/html/issues/6768
 [so-answer]: https://stackoverflow.com/a/76200536/200987
 
-This is a fork of Alon Mizrahi's work, made available as a package and with quite a few improvements. The new code no longer uses Alon's approach, which was relying on parsing
-error messages with a format that was Chromium specific, and has a new approach that works in Firefox and others as well.
+This package was originally a fork of Alon Mizrahi's work, but the new code no longer uses Alon's approach, which was relying on parsing
+Chromium specific error messages, and the new approach works in Firefox and other browsers as well.
 
 Completed improvements:
 
