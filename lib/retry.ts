@@ -40,9 +40,15 @@ const strategies: Record<StrategyName, UrlStrategy> = {
   },
 };
 
-const defaultOpts = {
+type Opts = {
+  strategy: StrategyName;
+  importFunction: (path: string) => Promise<any>;
+  logger: (...args: any[]) => void;
+}
+
+const defaultOpts: Opts = {
   strategy: "PARSE_IMPORTER_FUNCTION_BODY" as const,
-  importFunction: (path: string) => import(/* @vite-ignore */ path),
+  importFunction: (path) => import(/* @vite-ignore */ path),
   logger: noop,
 };
 /**
@@ -51,11 +57,7 @@ const defaultOpts = {
  */
 export default function createDynamicImportWithRetry<T extends number>(
   maxRetries: PositiveInteger<T>,
-  opts: Partial<{
-    strategy: StrategyName;
-    importFunction: () => Promise<any>;
-    logger: (...args: any[]) => void;
-  }> = {},
+  opts: Partial<Opts> = {},
 ): <TImportReturn>(
   importer: () => Promise<TImportReturn>,
 ) => Promise<TImportReturn> {
