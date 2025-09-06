@@ -16,7 +16,7 @@ function parseModulePathFromImporterBody(importer: () => any): string | null {
   return match.filter(identity)[2];
 }
 
-type UrlStrategy = (error: Error, importer: () => any) => string | null;
+export type UrlStrategy = (error: Error, importer: () => any) => string | null;
 export type StrategyName =
   | "PARSE_ERROR_MESSAGE"
   | "PARSE_IMPORTER_FUNCTION_BODY";
@@ -39,6 +39,13 @@ const strategies: Record<StrategyName, UrlStrategy> = {
     return parseModulePathFromImporterBody(importer);
   },
 };
+const getModulePath = (strategy: StrategyName | UrlStrategy, error: Error, importer: () => any): string | null => {
+  const strategyFn = typeof strategy === 'function'
+    ? strategy
+    : strategies[strategy];
+
+  return strategyFn(error, importer);
+}
 
 const defaultOpts = {
   strategy: "PARSE_IMPORTER_FUNCTION_BODY" as const,
@@ -52,7 +59,7 @@ const defaultOpts = {
 export default function createDynamicImportWithRetry<T extends number>(
   maxRetries: PositiveInteger<T>,
   opts: Partial<{
-    strategy: StrategyName;
+    strategy: StrategyName | UrlStrategy,
     importFunction: () => Promise<any>;
     logger: (...args: any[]) => void;
   }> = {},
@@ -73,7 +80,7 @@ export default function createDynamicImportWithRetry<T extends number>(
     } catch (error: any) {
       logger(Date.now(), `Importing failed: `, error);
 
-      const modulePath = strategies[strategy](error, importer);
+      const modulePath = getModulePath(strategy, error, importer);
       logger(`Parsed url using ${strategy}:${modulePath}`);
 
       if (!modulePath) {
