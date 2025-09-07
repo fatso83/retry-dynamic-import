@@ -1,13 +1,15 @@
 import createDynamicImportWithRetry, {
   _parseModuleUrlFromImporterBody as parseBody,
 } from "./retry";
+import type {
+  Opts,
+  UrlStrategy,
+} from "./retry"
 
 import debug from "debug";
 
 const logger = debug("dynamic-import:test");
 
-// Not able to get this working for some reason? It cannot find the export
-//import type {StrategyName} from  "./dynamic-import-with-retry";
 
 describe("path parsing of importer function", () => {
   // @ts-ignore
@@ -44,21 +46,20 @@ describe("path parsing of importer function", () => {
 
 describe("createDynamicImportWithRetry bust the cache of a module using the current time", () => {
   const path = "./foo-a123.js";
+  const body = `
+    throw new TypeError("Failed to fetch dynamically imported module: https://localhost:1234/assets/${path.slice(
+      2,
+    )}");
 
+    // required to parse the path
+    return import("${path}");`;
+
+  const originalImport = new Function(body) as () => Promise<any> ;
   const testRetryImportUsingStrategy = async (
-    strategy: string,
+    strategy: Opts['strategy'],
     expectedPrefix: string,
+    importer: () => Promise<any> = originalImport,
   ) => {
-    const body = `
-      throw new TypeError("Failed to fetch dynamically imported module: https://localhost:1234/assets/${path.slice(
-        2,
-      )}");
-
-      // required to parse the path
-      return import("${path}");`;
-
-    const originalImport = new Function(body);
-
     const clock = jest.useFakeTimers({ now: 0, doNotFake: [] });
     const importStubUsedInRetries = jest.fn();
     importStubUsedInRetries
@@ -71,9 +72,7 @@ describe("createDynamicImportWithRetry bust the cache of a module using the curr
       logger,
     });
 
-    const /* ignored */ _promise = dynamicImportWithRetry(
-        originalImport as any,
-      ).catch(logger);
+    dynamicImportWithRetry(importer).catch(logger);
     await clock.advanceTimersByTimeAsync(1000);
 
     expect(importStubUsedInRetries).toHaveBeenCalledTimes(2);
@@ -96,4 +95,19 @@ describe("createDynamicImportWithRetry bust the cache of a module using the curr
       "PARSE_ERROR_MESSAGE" as const,
       "https://localhost:1234/assets",
     ));
+
+  test("it works using custom strategy", ()=>  {
+    const moduleSpecifierSymbol = Symbol();
+
+    const useHintAssignedToImporter: UrlStrategy = (_, importer) =>
+      moduleSpecifierSymbol in importer
+        ? String(importer[moduleSpecifierSymbol])
+        : null;
+
+    const importer = Object.assign(() => import(path), {
+      [moduleSpecifierSymbol]: path,
+    });
+
+    return testRetryImportUsingStrategy(useHintAssignedToImporter, ".", importer);
+  });
 });
