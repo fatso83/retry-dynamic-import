@@ -16,7 +16,7 @@ function parseModulePathFromImporterBody(importer: () => any): string | null {
   return match.filter(identity)[2];
 }
 
-type UrlStrategy = (error: Error, importer: () => any) => string | null;
+export type UrlStrategy = (error: Error, importer: () => any) => string | null;
 export type StrategyName =
   | "PARSE_ERROR_MESSAGE"
   | "PARSE_IMPORTER_FUNCTION_BODY";
@@ -39,23 +39,43 @@ const strategies: Record<StrategyName, UrlStrategy> = {
     return parseModulePathFromImporterBody(importer);
   },
 };
+const getModulePath = (strategy: Opts['strategy'], error: Error, importer: () => any): string | null => {
+  const strategyFn = typeof strategy === 'function'
+    ? strategy
+    : strategies[strategy];
 
-const defaultOpts = {
+  return strategyFn(error, importer);
+}
+
+/**
+ * strategy - can be one of the pre-defined strategies or a custom one passed in as a function
+ * importFunction - strictly meant for testing to easily override the default `import()` function
+ */
+export type Opts = {
+  strategy: StrategyName | UrlStrategy,
+  importFunction: (path: string) => Promise<any>;
+  logger: (...args: any[]) => void;
+}
+
+const defaultOpts: Opts = {
   strategy: "PARSE_IMPORTER_FUNCTION_BODY" as const,
-  importFunction: (path: string) => import(/* @vite-ignore */ path),
+  importFunction: (path) => import(/* @vite-ignore */ path),
   logger: noop,
 };
+
 /**
+ * @param {number} maxRetries - how many retries to allow. We employ exponential backoff
+ * @param {Opts} opts - optional parameters, some just used for testing
+ * @param opts.strategy - pass in a custom function or one of the pre-defined string constants
+ * @param opts.importFunction - strictly meant for testing; stubbing out the default `import()`
+ * @param opts.logger - override the logger with your own
+ *
  * Future improvements:
  * - cache successful variations to skip unnecessary lag on subsequent reloads
  */
 export default function createDynamicImportWithRetry<T extends number>(
   maxRetries: PositiveInteger<T>,
-  opts: Partial<{
-    strategy: StrategyName;
-    importFunction: () => Promise<any>;
-    logger: (...args: any[]) => void;
-  }> = {},
+  opts: Partial<Opts> = {},
 ): <TImportReturn>(
   importer: () => Promise<TImportReturn>,
 ) => Promise<TImportReturn> {
@@ -73,7 +93,7 @@ export default function createDynamicImportWithRetry<T extends number>(
     } catch (error: any) {
       logger(Date.now(), `Importing failed: `, error);
 
-      const modulePath = strategies[strategy](error, importer);
+      const modulePath = getModulePath(strategy, error, importer);
       logger(`Parsed url using ${strategy}:${modulePath}`);
 
       if (!modulePath) {
