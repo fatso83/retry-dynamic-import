@@ -47,6 +47,10 @@ const getModulePath = (strategy: Opts['strategy'], error: Error, importer: () =>
   return strategyFn(error, importer);
 }
 
+/**
+ * strategy - can be one of the pre-defined strategies or a custom one passed in as a function
+ * importFunction - strictly meant for testing to easily override the default `import()` function
+ */
 export type Opts = {
   strategy: StrategyName | UrlStrategy,
   importFunction: (path: string) => Promise<any>;
@@ -58,7 +62,14 @@ const defaultOpts: Opts = {
   importFunction: (path) => import(/* @vite-ignore */ path),
   logger: noop,
 };
+
 /**
+ * @param {number} maxRetries - how many retries to allow. We employ exponential backoff
+ * @param {Opts} opts - optional parameters, some just used for testing
+ * @param opts.strategy - pass in a custom function or one of the pre-defined string constants
+ * @param opts.importFunction - strictly meant for testing; stubbing out the default `import()`
+ * @param opts.logger - override the logger with your own
+ *
  * Future improvements:
  * - cache successful variations to skip unnecessary lag on subsequent reloads
  */

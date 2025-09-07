@@ -68,6 +68,30 @@ const myModule = dynamicImportWithRetry(() => import("./my-module")); // this wo
 
 See the unit tests or the implementation for what options it supports.
 
+### Custom strategies
+The `createDynamicImportWithRetry` factory recently got a new feature that allows you to pass in _your own custom strategy_ for dealing with imports, instead of the pre-defined ones. One specific use-case, shown in the tests, is that this opens up for supporting retries of _dynamic_ import paths. 
+
+```typescript
+// ONE-TIME SETUP
+const moduleSpecifierSymbol = Symbol()
+const lookupUsingSymbolInImporter: UrlStrategy = (_, importer) =>
+    moduleSpecifierSymbol in importer
+    ? String(importer[moduleSpecifierSymbol])
+    : null;
+
+const customRetryImport = createDynamicImportWithRetry(3, {strategy: lookupUsingSymbolInImporter})
+// ...
+
+// USE
+// This can now be used with dynamically created paths like this
+const path = readFromUser();
+const importer = Object.assign(() => import(path), {
+    [moduleSpecifierSymbol]: path,
+});
+
+await customRetryImport(importer)
+```
+
 ### React utility
 
 Additionallly, you can `import reactLazyWithRetry from '@fatso83/retry-dynamic-import/react-lazy'` for a utility that can be used instead of React.lazy() for lazy imports with retries. In version 1.\* this was exposed on root, but most bundlers were [unable to tree-shake React][issue-1], so I decided to make a breaking change for version 2 that exposes it as subpath export.
