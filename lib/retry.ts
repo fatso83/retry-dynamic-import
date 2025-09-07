@@ -39,7 +39,7 @@ const strategies: Record<StrategyName, UrlStrategy> = {
     return parseModulePathFromImporterBody(importer);
   },
 };
-const getModulePath = (strategy: StrategyName | UrlStrategy, error: Error, importer: () => any): string | null => {
+const getModulePath = (strategy: Opts['strategy'], error: Error, importer: () => any): string | null => {
   const strategyFn = typeof strategy === 'function'
     ? strategy
     : strategies[strategy];
@@ -47,9 +47,15 @@ const getModulePath = (strategy: StrategyName | UrlStrategy, error: Error, impor
   return strategyFn(error, importer);
 }
 
-const defaultOpts = {
+export type Opts = {
+  strategy: StrategyName | UrlStrategy,
+  importFunction: (path: string) => Promise<any>;
+  logger: (...args: any[]) => void;
+}
+
+const defaultOpts: Opts = {
   strategy: "PARSE_IMPORTER_FUNCTION_BODY" as const,
-  importFunction: (path: string) => import(/* @vite-ignore */ path),
+  importFunction: (path) => import(/* @vite-ignore */ path),
   logger: noop,
 };
 /**
@@ -58,11 +64,7 @@ const defaultOpts = {
  */
 export default function createDynamicImportWithRetry<T extends number>(
   maxRetries: PositiveInteger<T>,
-  opts: Partial<{
-    strategy: StrategyName | UrlStrategy,
-    importFunction: () => Promise<any>;
-    logger: (...args: any[]) => void;
-  }> = {},
+  opts: Partial<Opts> = {},
 ): <TImportReturn>(
   importer: () => Promise<TImportReturn>,
 ) => Promise<TImportReturn> {

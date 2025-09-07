@@ -2,7 +2,7 @@ import createDynamicImportWithRetry, {
   _parseModuleUrlFromImporterBody as parseBody,
 } from "./retry";
 import type {
-  StrategyName,
+  Opts,
   UrlStrategy,
 } from "./retry"
 
@@ -56,7 +56,7 @@ describe("createDynamicImportWithRetry bust the cache of a module using the curr
 
   const originalImport = new Function(body) as () => Promise<any> ;
   const testRetryImportUsingStrategy = async (
-    strategy: StrategyName | UrlStrategy,
+    strategy: Opts['strategy'],
     expectedPrefix: string,
     importer: () => Promise<any> = originalImport,
   ) => {
