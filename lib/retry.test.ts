@@ -111,3 +111,38 @@ describe("createDynamicImportWithRetry bust the cache of a module using the curr
     return testRetryImportUsingStrategy(useHintAssignedToImporter, ".", importer);
   });
 });
+
+describe("createDynamicImportWithRetry giving up", () => {
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
+  test("it rejects as soon as the last retry fails, without waiting another backoff period", async () => {
+    const clock = jest.useFakeTimers({ now: 0, doNotFake: [] });
+    const originalError = new Error(
+      "Failed to fetch dynamically imported module",
+    );
+    const alwaysFailingImport = jest
+      .fn()
+      .mockRejectedValue(new Error("Failed loading for some reason"));
+
+    const dynamicImportWithRetry = createDynamicImportWithRetry(3, {
+      importFunction: alwaysFailingImport,
+      strategy: () => "./foo.js",
+      logger,
+    });
+
+    let rejection: unknown;
+    dynamicImportWithRetry(() => Promise.reject(originalError)).catch(
+      (error) => {
+        rejection = error;
+      },
+    );
+
+    await clock.advanceTimersByTimeAsync(500 + 1000);
+
+    expect(alwaysFailingImport).toHaveBeenCalledTimes(3);
+    expect(rejection).toBe(originalError);
+    expect(clock.getTimerCount()).toBe(0);
+  });
+});
