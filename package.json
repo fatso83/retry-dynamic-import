@@ -60,5 +60,8 @@
   },
   "optionalDependencies": {
     "react": "> 16.6.0"
+  },
+  "volta": {
+    "node": "24.21.0"
   }
 }
