@@ -1,5 +1,10 @@
 # Verification of correct types and exports
 
+The tests use TypeScript 7. Its default module resolution is `bundler`; the
+`typescript-*-moduleresolution-default` fixture names refer to that default.
+The NodeNext fixture continues to test NodeNext explicitly. Vite client types
+provide the declarations for CSS imports.
+
 I have now gotten this working and verified to work as correctly with all the combinations I could think make sense:
 
 - typescript with default module resolution

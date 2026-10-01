@@ -7,9 +7,9 @@
   "scripts": {
     "dev": "vite dev",
     "build": "for f in typescript-*; do vite build \"$f\" || exit; done",
-    "typecheck:ts-default": "tsc --noEmit typescript-moduleresolution-default/src/main.ts",
-    "typecheck:ts-react-default": "tsc --noEmit --allowImportingTsExtensions  --jsx react typescript-react-moduleresolution-default/src/main.tsx",
-    "typecheck:ts-nodenext": "tsc --noEmit --allowImportingTsExtensions --module nodenext --moduleResolution nodenext typescript-moduleresolution-nodenext/src/main.ts",
+    "typecheck:ts-default": "tsc --ignoreConfig --types vite/client --noEmit typescript-moduleresolution-default/src/main.ts",
+    "typecheck:ts-react-default": "tsc --ignoreConfig --types vite/client --noEmit --allowImportingTsExtensions  --jsx react typescript-react-moduleresolution-default/src/main.tsx",
+    "typecheck:ts-nodenext": "tsc --ignoreConfig --types vite/client --noEmit --allowImportingTsExtensions --module nodenext --moduleResolution nodenext typescript-moduleresolution-nodenext/src/main.ts",
     "typecheck": "run-p typecheck:*",
     "pretest": "../scripts/workaround-for-tsc-symlink-issue.sh",
     "test": "run-s typecheck build && ! (grep -i react typescript-moduleresolution-*/dist/assets/*)"
@@ -19,7 +19,7 @@
     "npm-run-all2": "^8.0.4",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
-    "typescript": "~5.9.3",
+    "typescript": "^7.0.2",
     "vite": "^8.3.1"
   }
 }
