@@ -14,3 +14,4 @@ cp -a dist/* pkg/
 cp -a types/* pkg/
 cp package.json pkg/
 cp README.md pkg
+cp LICENSE pkg/

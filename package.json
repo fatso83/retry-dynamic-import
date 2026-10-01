@@ -4,6 +4,7 @@
   "version": "2.2.1",
   "type": "module",
   "author": "Carl-Erik Kopseng",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "http://github.com/fatso83/retry-dynamic-import.git"
