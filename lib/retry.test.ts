@@ -78,12 +78,12 @@ describe("createDynamicImportWithRetry bust the cache of a module using the curr
     expect(importStubUsedInRetries).toHaveBeenCalledTimes(2);
 
     // should fail
-    expect(importStubUsedInRetries).toBeCalledWith(
+    expect(importStubUsedInRetries).toHaveBeenCalledWith(
       `${expectedPrefix}/foo-a123.js?t=0` /* 0 */,
     );
 
     // success call
-    expect(importStubUsedInRetries).toBeCalledWith(
+    expect(importStubUsedInRetries).toHaveBeenCalledWith(
       `${expectedPrefix}/foo-a123.js?t=500` /* 0 + 2^-1*/,
     );
   };
