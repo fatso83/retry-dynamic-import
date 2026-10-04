@@ -125,3 +125,15 @@ Please do!
 - Run tests: `DEBUG=dynamic-import:* npm t -- --watch` (the env var is just for verbose output)
 
 [issue-1]: https://github.com/fatso83/retry-dynamic-import/issues/1
+
+### Packaging and release checks
+
+Run `npm test`, `npm run build`, `npm run test-consumers`, and
+`npm run test:package` before releasing. The package test installs the actual
+`.tgz` into a temporary consumer and verifies runtime exports, TypeScript
+imports, and retry behavior after Vite's default production minification.
+
+Use `npm run pack:release` to build and create a validated tarball in `pkg/`.
+The release script validates that same tarball before publishing it. Packing
+or publishing directly from the source checkout is rejected because its
+advertised entry files exist only in `pkg/` after the build.

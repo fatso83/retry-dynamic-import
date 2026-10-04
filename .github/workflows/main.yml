@@ -31,3 +31,5 @@ jobs:
         run: npm run build
       - name: test consumers of package
         run: npm run test-consumers
+      - name: test packed release
+        run: npm run test:package

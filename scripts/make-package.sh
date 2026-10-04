@@ -12,6 +12,14 @@ rm -r pkg 2>/dev/null || :
 mkdir pkg || :
 cp -a dist/* pkg/
 cp -a types/* pkg/
-cp package.json pkg/
+# Publish runtime metadata only; source build/test hooks must not run from pkg/.
+node --input-type=module <<'JS'
+import fs from 'node:fs';
+const manifest = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+delete manifest.scripts;
+delete manifest.devDependencies;
+delete manifest.volta;
+fs.writeFileSync('pkg/package.json', JSON.stringify(manifest, null, 2) + '\n');
+JS
 cp README.md pkg
 cp LICENSE pkg/

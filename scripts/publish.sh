@@ -42,18 +42,9 @@ publish(){
     echo Running publish step
 
     local build_dir=$(mktemp -d)
-    ./scripts/make-package.sh
-    npm pack --pack-destination "$build_dir" ./pkg 2>/dev/null
-
-    local file="$build_dir"/*.tgz
-    local count=$(tar tf  $file | egrep '(d.ts|.js)$' | wc -l)
-
-    if (( $count < 6 )); then 
-        echo "Expected to find at least 7 js and d.ts files. Found $count."
-        exit 
-    fi
-
-    npm publish $file
+    local file
+    file=$(node scripts/pack-release.mjs "$build_dir")
+    npm publish "$file"
 }
 
 postpublish(){

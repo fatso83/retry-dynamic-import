@@ -30,7 +30,10 @@
     "postversion": "./scripts/publish.sh",
     "test": "jest",
     "test-consumers": "cd test-builds && npm t",
-    "pretest": "tsc --noEmit"
+    "pretest": "tsc --noEmit",
+    "prepack": "node scripts/prepack.mjs",
+    "pack:release": "npm run build && node scripts/pack-release.mjs",
+    "test:package": "node --test scripts/pack-safety.test.mjs && node scripts/pack-release.mjs"
   },
   "exports": {
     ".": "./index.js",
