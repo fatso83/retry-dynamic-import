@@ -126,14 +126,35 @@ Please do!
 
 [issue-1]: https://github.com/fatso83/retry-dynamic-import/issues/1
 
-### Packaging and release checks
+### Publishing a patch release
 
-Run `npm test`, `npm run build`, `npm run test-consumers`, and
-`npm run test:package` before releasing. The package test installs the actual
-`.tgz` into a temporary consumer and verifies runtime exports, TypeScript
-imports, and retry behavior after Vite's default production minification.
+With all changes committed on `main` and npm authentication configured, run:
 
-Use `npm run pack:release` to build and create a validated tarball in `pkg/`.
-The release script validates that same tarball before publishing it. Packing
-or publishing directly from the source checkout is rejected because its
-advertised entry files exist only in `pkg/` after the build.
+```sh
+npm version patch
+```
+
+This is the complete release command. The `preversion` hook installs the demo
+and consumer dependencies from their lockfiles with `npm ci`, then runs unit tests, builds, consumer tests and
+packed-package checks. npm increments the version and creates a version commit
+and tag. The `postversion` hook rebuilds with the new version, validates the
+actual tarball, publishes that tarball to npm, updates the demo on GitHub Pages,
+and pushes the branches and tags.
+
+If npm authentication is missing or expired, run `npm login` first. npm may
+also ask you to authenticate the publish operation.
+
+Do not run a separate `npm publish` from the source checkout. The release
+command publishes the validated package from `pkg/` instead.
+
+### Packaging without publishing
+
+Use `npm run pack:release` to build and create a validated tarball in `pkg/`
+without publishing it or changing the version.
+
+To run the checks individually: `npm test`, `npm run build`,
+`npm run test-consumers`, and `npm run test:package`. The package test installs
+the actual `.tgz` into a temporary consumer and verifies runtime exports,
+TypeScript imports, and retry behavior after Vite's default production
+minification. Packing or publishing directly from the source checkout is
+rejected because its advertised entry files exist only in `pkg/` after the build.

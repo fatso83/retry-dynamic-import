@@ -22,7 +22,7 @@
     "build:types": "tsc --project ./tsconfig.build.json",
     "build:dist": "vite build",
     "build": "run-p build:types build:dist build:demo && npm run build:demo-gh-pages && ./scripts/make-package.sh",
-    "install-build-deps": "cd demo && npm i; cd ../test-builds && npm i",
+    "install-build-deps": "npm ci --prefix demo && npm ci --prefix test-builds",
     "postpack": "echo running pack $@ && exit 0 ",
     "prepreview:demo": "npm run build:demo",
     "preview:demo": "vite preview -c demo/vite.config.ts demo/",
