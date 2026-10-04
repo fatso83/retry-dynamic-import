@@ -7,13 +7,15 @@ type PositiveInteger<T extends number> = `${T}` extends
 
 const noop = () => {};
 
-const identity = (e: any) => e;
-const uriOrRelativePathRegex = /(['"])((\w+:(\/?\/?))?[^\s,]+)\1/;
+// Match the import argument, not unrelated strings in a bundler preload wrapper.
+// Escaped specifiers and interpolated templates cannot be recovered verbatim.
+const staticImportSpecifierRegex = /\bimport\s*\(\s*(?:\/\*[\s\S]*?\*\/\s*)?(['"`])((?:(?!\1)[^\\\r\n])+)\1\s*\)/;
 function parseModulePathFromImporterBody(importer: () => any): string | null {
-  const fnString = importer.toString();
-  const match = fnString.match(uriOrRelativePathRegex);
+  const match = importer.toString().match(staticImportSpecifierRegex);
   if (!match) return null;
-  return match.filter(identity)[2];
+  const [, quote, path] = match;
+  if (quote === "`" && path.includes("${")) return null;
+  return path;
 }
 
 export type UrlStrategy = (error: Error, importer: () => any) => string | null;
