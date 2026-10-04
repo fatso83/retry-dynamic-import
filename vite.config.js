@@ -6,8 +6,8 @@ export default defineConfig({
     lib: {
       // Could also be a dictionary or array of multiple entry points
       entry: {
-        index: resolve(__dirname, "lib/index.ts"),
-        ["react-lazy"]: resolve(__dirname, "lib/react-lazy.ts"),
+        index: resolve(import.meta.dirname, "lib/index.ts"),
+        ["react-lazy"]: resolve(import.meta.dirname, "lib/react-lazy.ts"),
       },
     },
     rollupOptions: {

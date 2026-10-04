@@ -17,4 +17,4 @@ git pull
 # don't want to run this every time I build, just 
 # to ensure all is OK before versioning
 npm run install-build-deps
-./node_modules/.bin/run-s test build test-consumers
+./node_modules/.bin/run-s test build test-consumers test:package

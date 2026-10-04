@@ -7,13 +7,15 @@ type PositiveInteger<T extends number> = `${T}` extends
 
 const noop = () => {};
 
-const identity = (e: any) => e;
-const uriOrRelativePathRegex = /(['"])((\w+:(\/?\/?))?[^\s,]+)\1/;
+// Match the import argument, not unrelated strings in a bundler preload wrapper.
+// Escaped specifiers and interpolated templates cannot be recovered verbatim.
+const staticImportSpecifierRegex = /\bimport\s*\(\s*(?:\/\*[\s\S]*?\*\/\s*)?(['"`])((?:(?!\1)[^\\\r\n])+)\1\s*\)/;
 function parseModulePathFromImporterBody(importer: () => any): string | null {
-  const fnString = importer.toString();
-  const match = fnString.match(uriOrRelativePathRegex);
+  const match = importer.toString().match(staticImportSpecifierRegex);
   if (!match) return null;
-  return match.filter(identity)[2];
+  const [, quote, path] = match;
+  if (quote === "`" && path.includes("${")) return null;
+  return path;
 }
 
 export type UrlStrategy = (error: Error, importer: () => any) => string | null;
@@ -102,7 +104,7 @@ export default function createDynamicImportWithRetry<T extends number>(
         throw error;
       }
 
-      // retry x times with 2 second delay base and backoff factor of 2 (1/2, 1, 2, 4, 8 seconds)
+      // retry x times with 2 second delay base and backoff factor of 2 between attempts (1/2, 1, 2, 4 seconds)
       for (let i = 0; i < maxRetries; i++) {
         // add a timestamp to the url to force a reload of the module (and not use the cached version - cache busting)
         let cacheBustedPath = `${modulePath}?t=${+new Date()}`;
@@ -115,9 +117,12 @@ export default function createDynamicImportWithRetry<T extends number>(
           return await importFunction(cacheBustedPath);
         } catch (e) {
           logger(`Import for ${cacheBustedPath} failed`);
-          await new Promise((resolve) =>
-            setTimeout(resolve, 1000 * 2 ** (i - 1)),
-          );
+          const isLastRetry = i === maxRetries - 1;
+          if (!isLastRetry) {
+            await new Promise((resolve) =>
+              setTimeout(resolve, 1000 * 2 ** (i - 1)),
+            );
+          }
         }
       }
       throw error;
